@@ -286,6 +286,7 @@ async function doLogin() {
     initAppWithData({
       nama: 'Rina Kusuma',
       email: email,
+      kursusId: 'C001',
       kursus: 'UI/UX Design Bootcamp',
       expDate: '31 Des 2025',
       progress: [true, false, false, false, false]
@@ -326,6 +327,7 @@ async function doLogin() {
         initAppWithData({
           nama: user.nama,
           email: user.email,
+          kursusId: user.kursusId,
           kursus: user.kursus,
           expDate: user.expDate,
           progress: user.progress || []
@@ -334,10 +336,11 @@ async function doLogin() {
         initAppWithData({
           nama: user.nama,
           email: user.email,
+          kursusId: user.kursusId,
           kursus: user.kursus,
           expDate: user.expDate,
           progress: []
-        }, DEMO_MODS);
+        }, []);
       }
     } else {
       document.getElementById('lerr').style.display = 'block';
@@ -356,7 +359,9 @@ function initAppWithData(user, mods) {
   currentMods = mods;
   
   // Inisialisasi progress
-  if (user.progress && user.progress.length > 0) {
+  if (!mods.length) {
+    progress = [];
+  } else if (user.progress && user.progress.length > 0) {
     progress = user.progress;
   } else {
     progress = new Array(mods.length).fill(false);
@@ -390,7 +395,11 @@ function initAppWithData(user, mods) {
   
   updateProg();
   renderSb();
-  loadMod(0);
+  if (mods.length) {
+    loadMod(0);
+  } else {
+    renderEmptyMateri();
+  }
   startStudentChat();
 }
 
@@ -417,12 +426,16 @@ function updateProg() {
   const d = progress.filter(Boolean).length;
   const t = progress.length;
   document.getElementById('progTxt').textContent = d + '/' + t + ' modul';
-  document.getElementById('progBar').style.width = Math.round(d / t * 100) + '%';
+  document.getElementById('progBar').style.width = t ? Math.round(d / t * 100) + '%' : '0%';
 }
 
 function renderSb() {
   let sec = '', html = '';
   const mods = currentMods;
+  if (!mods.length) {
+    document.getElementById('mList').innerHTML = '<div style="padding:18px 10px;color:var(--txl);font-size:12px;line-height:1.5">Materi kursus ini belum tersedia.</div>';
+    return;
+  }
   
   mods.forEach((m, i) => {
     if (m.sec !== sec) {
@@ -444,6 +457,18 @@ function renderSb() {
   });
   
   document.getElementById('mList').innerHTML = html;
+}
+
+function renderEmptyMateri() {
+  document.getElementById('tbTitle').textContent = 'Materi Belum Tersedia';
+  document.getElementById('ca').innerHTML = `
+    <div style="background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:32px;max-width:640px">
+      <div class="mod-num">Portal Belajar</div>
+      <div class="mod-title">Materi kursus ini belum tersedia</div>
+      <p style="color:var(--txm);font-size:14px;margin-top:8px">Akses kamu sudah aktif, tapi admin belum menambahkan modul untuk kursus <strong>${currentUser ? currentUser.kursus : 'ini'}</strong> di Google Sheets.</p>
+      <p style="color:var(--txl);font-size:13px;margin-top:12px">Silakan cek lagi nanti atau gunakan Chat Admin untuk konfirmasi jadwal rilis materi.</p>
+    </div>
+  `;
 }
 
 function loadMod(i) {
