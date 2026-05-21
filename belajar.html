@@ -713,7 +713,7 @@ function buildProtectedEmbedUrl(url) {
     id = match ? match[1] : '';
   }
   if (!id) return raw;
-  return 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3';
+  return 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?rel=0&modestbranding=1&playsinline=1';
 }
 
 function escapeAttr(str) {
