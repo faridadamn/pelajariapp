@@ -23,10 +23,10 @@
 // ================================================================
 //  KONFIGURASI — wajib diisi sebelum deploy
 // ================================================================
-const SPREADSHEET_ID = '19LxrqOEJTRQpVOPP3ZrkF10NE396A_KzuTtrsk_2eng';
+const SPREADSHEET_ID = '1bb_I65Fugi8H9lKRxoW86gDwdiD2q2Xi-3jHnQ__ZnY';
 const ADMIN_EMAIL    = 'pelajariapp@gmail.com';
 const BRAND_NAME     = 'Pelajari';
-const PORTAL_URL     = 'https://faridadamn.github.io/pelajari/index.html';
+const PORTAL_URL     = 'https://faridadamn.github.io/pelajariapp/index.html';
 
 // Nama tab Sheet (jangan diubah kecuali perlu)
 const SH = {
