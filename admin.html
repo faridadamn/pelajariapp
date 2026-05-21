@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — AkademiPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#1a6b4a;--brand2:#2d9668;--bl:#e8f5ee;--bm:#9fe1cb;--acc:#f0a500;--tx:#121c17;--txm:#4a6055;--txl:#8fa89d;--bg:#f5f9f7;--wh:#fff;--br:#d8e8e1;--dan:#e05252;--danl:#ffeaea;--warn:#f0a500;--warnl:#fff8e6;--r:14px;--rs:8px;--sh:0 2px 16px rgba(26,107,74,.08);--fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
+.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.lb{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:36px;width:100%;max-width:360px;box-shadow:var(--sh);text-align:center}
+.lb-logo{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--brand);margin-bottom:4px}
+.lb-logo span{color:var(--acc)}
+.lb-sub{font-size:13px;color:var(--txl);margin-bottom:22px}
+.lb h2{font-family:var(--fh);font-size:17px;margin-bottom:16px}
+.lb input{width:100%;padding:11px 14px;border:1.5px solid var(--br);border-radius:var(--rs);font-size:14px;font-family:var(--fb);margin-bottom:12px;outline:none;transition:border-color .2s}
+.lb input:focus{border-color:var(--brand)}
+.lb-btn{width:100%;background:var(--brand);color:#fff;border:none;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.lb-btn:hover{background:var(--brand2)}
+.lb-err{font-size:12px;color:var(--dan);margin-top:8px;display:none}
+.app{display:none;height:100vh;overflow:hidden}
+.app.on{display:flex}
+.sb{width:220px;background:var(--wh);border-right:1px solid var(--br);display:flex;flex-direction:column;flex-shrink:0}
+.sb-logo{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--brand);padding:18px 18px 14px;border-bottom:1px solid var(--br)}
+.sb-logo span{color:var(--acc)}
+.sb-logo small{display:block;font-size:10px;font-weight:400;color:var(--txl);margin-top:1px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--txm);cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{background:var(--bl);color:var(--brand)}
+.nav-item.active{background:var(--bl);color:var(--brand);border-left-color:var(--brand)}
+.nav-item .ic{font-size:14px;width:18px;text-align:center}
+.sb-foot{margin-top:auto;padding:14px 18px;border-top:1px solid var(--br);font-size:11px;color:var(--txl)}
+.sb-foot strong{display:block;font-size:13px;color:var(--tx);margin-bottom:2px}
+.main{flex:1;overflow:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--wh);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.tb-title{font-family:var(--fh);font-size:15px;font-weight:600}
+.sync-status{font-size:11px;color:var(--txl);padding:3px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--br)}
+.sync-status.loading{color:var(--warn);border-color:var(--warn);background:var(--warnl)}
+.sync-status.ok{color:var(--brand);border-color:var(--bm);background:var(--bl)}
+.sync-status.err{color:var(--dan);border-color:#f7b3b3;background:var(--danl)}
+.topbar-right{display:flex;gap:10px;align-items:center}
+.lo-btn{font-size:12px;color:var(--txl);background:none;border:1px solid var(--br);padding:6px 14px;border-radius:20px;cursor:pointer;font-family:var(--fb)}
+.lo-btn:hover{color:var(--dan);border-color:var(--dan)}
+.page{display:none;padding:24px}
+.page.on{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:900px){.stat-grid{grid-template-columns:1fr 1fr}}
+.stat{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:16px}
+.stat-lbl{font-size:11px;font-weight:600;color:var(--txl);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.stat-val{font-family:var(--fh);font-size:26px;font-weight:700;margin-bottom:2px}
+.stat-sub{font-size:11px;color:var(--txl)}
+.stat.warn .stat-val{color:var(--warn)}
+.stat.ok .stat-val{color:var(--brand)}
+.stat.acc .stat-val{color:var(--acc)}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sec-title{font-family:var(--fh);font-size:15px;font-weight:600}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters input,.filters select{padding:7px 12px;border:1px solid var(--br);border-radius:var(--rs);font-size:13px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none}
+.filters input{width:190px}
+.btn-act{background:var(--brand);color:#fff;border:none;padding:8px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-act:hover{background:var(--brand2)}
+.tbl{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden}
+.th,.tr{display:grid;grid-template-columns:1.8fr 1.5fr 1.2fr 1.3fr 1.1fr 1.1fr;gap:8px;padding:10px 14px;align-items:center}
+.th{background:var(--bg);font-size:11px;font-weight:600;color:var(--txl);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--br)}
+.tr{border-bottom:1px solid var(--br);font-size:13px;transition:background .1s}
+.tr:last-child{border-bottom:none}
+.tr:hover{background:var(--bg)}
+.nm{font-weight:600;font-size:13px}
+.em{font-size:11px;color:var(--txl)}
+.bdg{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.bdg.pending{background:var(--warnl);color:#7a4f00}
+.bdg.verified{background:var(--bl);color:var(--brand)}
+.bdg.rejected{background:var(--danl);color:var(--dan)}
+.abtn{padding:5px 11px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fb);border:none}
+.abtn.rev{background:var(--bl);color:var(--brand)}
+.abtn.rev:hover{background:var(--brand);color:#fff}
+.abtn.done{background:var(--bg);color:var(--txl);cursor:default}
+/* KURSUS */
+.k-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.k-card{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;transition:box-shadow .2s}
+.k-card:hover{box-shadow:var(--sh)}
+.k-head{padding:18px 16px 14px;border-bottom:1px solid var(--br);display:flex;align-items:flex-start;gap:10px}
+.k-emoji{font-size:30px;flex-shrink:0}
+.k-name{font-family:var(--fh);font-size:14px;font-weight:600;margin-bottom:3px}
+.k-meta{font-size:12px;color:var(--txl)}
+.k-price{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--brand);margin-top:4px}
+.k-body{padding:12px 16px}
+.k-stat-row{display:flex;justify-content:space-between;font-size:12px;color:var(--txl);margin-bottom:10px}
+.k-stat-val{font-weight:600;color:var(--tx)}
+.k-actions{display:flex;gap:8px}
+.btn-edit-k{flex:1;background:var(--bl);color:var(--brand);border:none;padding:8px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-edit-k:hover{background:var(--brand);color:#fff}
+.btn-materi{flex:1;background:var(--bg);color:var(--txm);border:1px solid var(--br);padding:8px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-materi:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+/* MATERI EDITOR */
+.materi-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;min-height:500px}
+@media(max-width:900px){.materi-layout{grid-template-columns:1fr}}
+.materi-sb{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;height:fit-content}
+.msb-head{padding:12px 14px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.msb-title{font-size:13px;font-weight:600}
+.btn-add-mod{background:var(--brand);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.mod-row{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--br);cursor:pointer;transition:background .15s;font-size:13px}
+.mod-row:last-child{border-bottom:none}
+.mod-row:hover{background:var(--bg)}
+.mod-row.active{background:var(--bl);color:var(--brand);font-weight:500}
+.mod-num-badge{width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--txl);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mod-row.active .mod-num-badge{background:var(--brand);color:#fff}
+.mod-row-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mod-row-del{font-size:11px;color:var(--txl);background:none;border:none;cursor:pointer;padding:2px 5px;border-radius:4px}
+.mod-row-del:hover{background:var(--danl);color:var(--dan)}
+.materi-form{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:20px}
+.form-title-ed{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:12px;font-weight:600;color:var(--txm);margin-bottom:5px}
+.fg label span{color:var(--dan)}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:1.5px solid var(--br);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none;transition:border-color .2s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--brand)}
+.fg textarea{height:90px;resize:vertical}
+.fg-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg-hint{font-size:11px;color:var(--txl);margin-top:4px}
+/* QUIZ EDITOR */
+.quiz-editor{margin-top:20px;padding-top:20px;border-top:1px solid var(--br)}
+.qe-title{font-size:14px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.qe-item{background:var(--bg);border:1px solid var(--br);border-radius:var(--rs);padding:14px;margin-bottom:10px;position:relative}
+.qe-num{font-size:11px;font-weight:700;color:var(--txl);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.qe-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.qe-opt-row{display:flex;align-items:center;gap:6px}
+.qe-opt-lbl{font-size:11px;font-weight:700;color:var(--txl);width:14px;flex-shrink:0}
+.qe-opt-row input{padding:7px 10px;font-size:13px}
+.qe-del{position:absolute;top:10px;right:10px;background:none;border:none;font-size:13px;cursor:pointer;color:var(--txl);padding:2px 6px;border-radius:4px}
+.qe-del:hover{background:var(--danl);color:var(--dan)}
+.ans-row{margin-top:8px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txm)}
+.ans-row select{width:auto;padding:5px 8px;font-size:12px}
+.expl-row .fg{margin-bottom:0;margin-top:6px}
+.expl-row textarea{height:56px;font-size:12px}
+.btn-add-q{background:var(--bl);color:var(--brand);border:1px solid var(--bm);padding:7px 16px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-add-q:hover{background:var(--brand);color:#fff}
+.form-actions{display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--br);align-items:center}
+.btn-save{background:var(--brand);color:#fff;border:none;padding:11px 28px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-save:hover{background:var(--brand2)}
+.btn-cancel{background:var(--wh);color:var(--txm);border:1.5px solid var(--br);padding:11px 22px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.save-ok{display:none;background:var(--bl);color:var(--brand);border:1px solid var(--bm);padding:8px 14px;border-radius:var(--rs);font-size:13px;font-weight:500}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.on{display:flex}
+.modal{background:var(--wh);border-radius:var(--r);padding:26px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto}
+.modal-title{font-family:var(--fh);font-size:17px;font-weight:600;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:1px solid var(--br);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;color:var(--txm)}
+.drow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--br);font-size:13px}
+.drow:last-of-type{border-bottom:none}
+.dlbl{color:var(--txl);font-size:12px;font-weight:500}
+.dval{font-weight:500;text-align:right;max-width:280px}
+.bukti-box{background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center;margin:12px 0;border:1px dashed var(--br)}
+.m-actions{display:flex;gap:8px;margin-top:18px}
+.btn-reject{flex:1;background:var(--danl);color:var(--dan);border:1px solid #f7b3b3;padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-reject:hover{background:var(--dan);color:#fff}
+.btn-verify{flex:2;background:var(--brand);color:#fff;border:none;padding:10px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-verify:hover{background:var(--brand2)}
+.empty-state{padding:36px;text-align:center;color:var(--txl);font-size:13px}
+.loading-row{padding:24px;text-align:center;color:var(--txl);font-size:13px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.chat-layout{display:grid;grid-template-columns:300px minmax(0,1fr);height:calc(100vh - 112px);border:1px solid var(--br);border-radius:var(--r);overflow:hidden;background:var(--wh)}
+.chat-list{border-right:1px solid var(--br);overflow-y:auto;background:#fafcfb}
+.chat-thread{padding:13px 14px;border-bottom:1px solid var(--br);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.chat-thread:hover,.chat-thread.active{background:var(--bl)}
+.chat-avatar{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--fh);flex-shrink:0}
+.chat-thread-main{min-width:0;flex:1}
+.chat-thread-top{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.chat-thread-name{font-weight:700;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-thread-time{color:var(--txl);white-space:nowrap}
+.chat-thread-sub{font-size:11px;color:var(--txl);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.chat-thread-last{font-size:12px;color:var(--txm);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:5px}
+.chat-unread{background:var(--acc);color:#fff;border-radius:999px;font-size:10px;min-width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;margin-left:6px}
+.chat-room{display:flex;flex-direction:column;min-width:0}
+.chat-room-head{padding:14px 16px;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.chat-room-title{font:700 15px var(--fh)}
+.chat-room-sub{font-size:12px;color:var(--txl)}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;background:#f7faf8;display:flex;flex-direction:column;gap:10px}
+.chat-empty{margin:auto;text-align:center;color:var(--txl);font-size:13px;max-width:260px}
+.chat-msg{max-width:72%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.45;white-space:pre-wrap}
+.chat-msg.siswa{align-self:flex-start;background:#fff;color:var(--tx);border:1px solid var(--br);border-bottom-left-radius:4px}
+.chat-msg.admin{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px}
+.chat-meta{font-size:10px;opacity:.68;margin-top:4px}
+.chat-form{display:flex;gap:10px;padding:12px;border-top:1px solid var(--br)}
+.chat-input{flex:1;min-height:44px;max-height:110px;resize:none;border:1px solid var(--br);border-radius:12px;padding:10px 12px;font:13px var(--fb);outline:none}
+.chat-send{background:var(--brand);color:#fff;border:0;border-radius:12px;padding:0 18px;font:700 13px var(--fb);cursor:pointer}
+.btn-close-chat{background:#fff;color:var(--txm);border:1px solid var(--br);border-radius:999px;padding:7px 12px;font:600 12px var(--fb);cursor:pointer}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--tx);color:#fff;padding:12px 20px;border-radius:var(--rs);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999;max-width:360px}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="lw" id="lw">
+  <div class="lb">
+    <div class="lb-logo">Akademi<span>Pro</span></div>
+    <div class="lb-sub">Panel Admin</div>
+    <h2>Masuk ke Dashboard</h2>
+    <input type="text" id="lu" placeholder="Username" autocomplete="username">
+    <input type="password" id="lp" placeholder="Password" autocomplete="current-password" onkeyup="if(event.key==='Enter')doLogin()">
+    <button class="lb-btn" onclick="doLogin()">Masuk →</button>
+    <div class="lb-err" id="lerr">Username atau password salah</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appEl">
+  <div class="sb">
+    <div class="sb-logo">Akademi<span>Pro</span><small>Admin Panel</small></div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="ic">📊</span>Dashboard</div>
+    <div class="nav-item" onclick="showPage('pendaftar',this)"><span class="ic">👥</span>Pendaftar</div>
+    <div class="nav-item" onclick="showPage('kursus',this)"><span class="ic">📚</span>Kelola Kursus</div>
+    <div class="nav-item" onclick="showPage('materi',this)"><span class="ic">✏️</span>Edit Materi</div>
+    <div class="nav-item" onclick="showPage('chat',this)"><span class="ic">💬</span>Chat</div>
+    <div class="sb-foot"><strong id="adName">Admin</strong>Logged in</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="tb-title" id="pageTitle">Dashboard</div>
+        <div class="sync-status" id="syncStatus">Menghubungkan...</div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-act" style="font-size:11px;padding:6px 12px" onclick="loadAllData()">↺ Refresh</button>
+        <button class="lo-btn" onclick="doLogout()">Keluar</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="pgDashboard">
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-lbl">Total Pendaftar</div><div class="stat-val" id="stTotal">—</div><div class="stat-sub">Semua waktu</div></div>
+        <div class="stat warn"><div class="stat-lbl">Menunggu Verifikasi</div><div class="stat-val" id="stPend">—</div><div class="stat-sub">Perlu ditinjau</div></div>
+        <div class="stat ok"><div class="stat-lbl">Sudah Verified</div><div class="stat-val" id="stVerif">—</div><div class="stat-sub">Akses aktif</div></div>
+        <div class="stat acc"><div class="stat-lbl">Pendapatan Bulan Ini</div><div class="stat-val" id="stRev">—</div><div class="stat-sub" id="stRevSub"></div></div>
+      </div>
+      <div class="sec-head">
+        <div class="sec-title">Pendaftar Terbaru</div>
+        <a href="#" onclick="showPage('pendaftar',document.querySelectorAll('.nav-item')[1]);return false" style="font-size:13px;color:var(--brand)">Lihat Semua →</a>
+      </div>
+      <div class="tbl">
+        <div class="th"><div>Nama / Email</div><div>Kursus</div><div>Tanggal</div><div>Nominal</div><div>Status</div><div>Aksi</div></div>
+        <div id="tblRecent"><div class="loading-row">Memuat data...</div></div>
+      </div>
+    </div>
+
+    <!-- PENDAFTAR -->
+    <div class="page" id="pgPendaftar">
+      <div class="sec-head">
+        <div class="sec-title">Semua Pendaftar</div>
+        <div class="filters">
+          <input type="text" id="srch" placeholder="Cari nama / email..." oninput="filterTbl()">
+          <select id="fSt" onchange="filterTbl()"><option value="">Semua Status</option><option value="pending">Menunggu</option><option value="verified">Verified</option><option value="rejected">Ditolak</option></select>
+          <select id="fKr" onchange="filterTbl()"><option value="">Semua Kursus</option></select>
+          <button class="btn-act" onclick="exportCSV()">Export CSV</button>
+        </div>
+      </div>
+      <div class="tbl">
+        <div class="th"><div>Nama / Email</div><div>Kursus</div><div>Tanggal</div><div>Nominal</div><div>Status</div><div>Aksi</div></div>
+        <div id="tblAll"><div class="loading-row">Memuat data...</div></div>
+      </div>
+    </div>
+
+    <!-- KURSUS -->
+    <div class="page" id="pgKursus">
+      <div class="sec-head">
+        <div class="sec-title">Kelola Kursus</div>
+        <button class="btn-act" onclick="showToast('Tambah kursus langsung di Google Sheets — tab Kursus, lalu Refresh')">+ Tambah Kursus</button>
+      </div>
+      <div class="k-grid" id="kGrid"><div class="loading-row">Memuat data...</div></div>
+    </div>
+
+    <!-- MATERI EDITOR -->
+    <div class="page" id="pgMateri">
+      <div class="sec-head" style="margin-bottom:16px">
+        <div class="sec-title">Edit Materi Kursus</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="selKursus" onchange="loadMateriKursus()" style="padding:7px 12px;border:1px solid var(--br);border-radius:var(--rs);font-size:13px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none"></select>
+        </div>
+      </div>
+      <div class="materi-layout">
+        <div class="materi-sb">
+          <div class="msb-head"><div class="msb-title">Daftar Modul</div><button class="btn-add-mod" onclick="addModul()">+ Modul</button></div>
+          <div id="modulSb"><div class="empty-state">Pilih kursus terlebih dahulu</div></div>
+        </div>
+        <div id="materiForm"><div class="empty-state">Pilih modul di sebelah kiri untuk mulai edit</div></div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="page" id="pgChat">
+      <div class="sec-head">
+        <div class="sec-title">Chat Siswa</div>
+        <button class="btn-act" onclick="loadChatThreads()">Refresh Chat</button>
+      </div>
+      <div class="chat-layout">
+        <div class="chat-list" id="chatList"><div class="loading-row">Memuat chat...</div></div>
+        <div class="chat-room">
+          <div class="chat-room-head">
+            <div><div class="chat-room-title" id="chatRoomTitle">Pilih percakapan</div><div class="chat-room-sub" id="chatRoomSub">Balas pertanyaan siswa dari sini.</div></div>
+            <button class="btn-close-chat" id="btnCloseChat" onclick="closeSelectedChat()" style="display:none">Tutup Chat</button>
+          </div>
+          <div class="chat-messages" id="chatMessages"><div class="chat-empty">Pilih siswa di sebelah kiri untuk membaca pesan.</div></div>
+          <form class="chat-form" onsubmit="sendAdminMessage(event)">
+            <textarea class="chat-input" id="adminChatInput" rows="1" placeholder="Tulis balasan..." disabled></textarea>
+            <button class="chat-send" id="adminChatSend" type="submit" disabled>Kirim</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VERIFIKASI -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-title">Detail Pembayaran <button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div id="modalBody"></div>
+    <div class="m-actions">
+      <button class="btn-reject" onclick="updateStatus('rejected')">✗ Tolak</button>
+      <button class="btn-verify" onclick="updateStatus('verified')">✓ Verifikasi & Kirim Akses</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================================================================
+   KONFIGURASI — ganti scriptUrl dengan URL deployment kamu
+   ================================================================ */
+const CFG = {
+  adminUser : 'admin',
+  adminPass : 'admin123',
+  scriptUrl : 'https://script.google.com/macros/s/AKfycby9IKljqOnN-JZUFUnP-_vSU9qzwpnFezypmJiaeIZOuh6Q8gf1P--2oxROiqbiUxY1zA/exec'
+};
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let allData    = [];
+let KURSUS_DATA = [];
+let MATERI_DATA = {};
+let curId = null, curKursus = '', curModIdx = 0;
+let CHAT_THREADS = [];
+let CHAT_MESSAGES = [];
+let curThreadId = '';
+let chatTimer = null;
+
+/* ================================================================
+   FETCH HELPER
+   Untuk GET: fetch biasa, response bisa dibaca
+   Untuk POST: fetch dengan Content-Type text/plain (Apps Script
+   butuh ini agar tidak trigger preflight CORS OPTIONS)
+   ================================================================ */
+async function apiFetch(params) {
+  const url = CFG.scriptUrl + '?' + new URLSearchParams(params);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+async function apiPost(body) {
+  // Apps Script: gunakan Content-Type text/plain untuk hindari CORS preflight
+  // Body tetap JSON string — diparse di doPost() dengan e.postData.contents
+  const res = await fetch(CFG.scriptUrl, {
+    method  : 'POST',
+    headers : { 'Content-Type': 'text/plain;charset=utf-8' },
+    body    : JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+function setSyncStatus(state, text) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  el.textContent = text;
+}
+
+/* ================================================================
+   LOGIN / LOGOUT
+   ================================================================ */
+function doLogin() {
+  const u = document.getElementById('lu').value.trim();
+  const p = document.getElementById('lp').value;
+  if (u === CFG.adminUser && p === CFG.adminPass) {
+    document.getElementById('lw').style.display = 'none';
+    document.getElementById('appEl').classList.add('on');
+    document.getElementById('adName').textContent = u.charAt(0).toUpperCase() + u.slice(1);
+    loadAllData();
+    if (chatTimer) clearInterval(chatTimer);
+    chatTimer = setInterval(loadChatThreads, 10000);
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+  }
+}
+function doLogout() {
+  if (chatTimer) clearInterval(chatTimer);
+  chatTimer = null;
+  document.getElementById('appEl').classList.remove('on');
+  document.getElementById('lw').style.display = 'flex';
+  document.getElementById('lp').value = '';
+  allData = []; KURSUS_DATA = []; MATERI_DATA = {};
+  CHAT_THREADS = []; CHAT_MESSAGES = []; curThreadId = '';
+}
+
+/* ================================================================
+   LOAD DATA DARI SHEETS
+   ================================================================ */
+async function loadAllData() {
+  setSyncStatus('loading', '⏳ Memuat...');
+  document.getElementById('tblRecent').innerHTML = '<div class="loading-row">Memuat data dari Google Sheets...</div>';
+  document.getElementById('tblAll').innerHTML    = '<div class="loading-row">Memuat data...</div>';
+
+  try {
+    // Fetch pendaftar, kursus, dan chat secara paralel
+    const [resPendaftar, resKursus, resChat] = await Promise.all([
+      apiFetch({ action: 'getAll' }),
+      apiFetch({ action: 'getCourses' }),
+      apiFetch({ action: 'getChatThreads' }),
+    ]);
+
+    /* ---- Pendaftar ---- */
+    if (resPendaftar && resPendaftar.pendaftar) {
+      allData = resPendaftar.pendaftar;
+    } else if (resPendaftar && resPendaftar.error) {
+      throw new Error(resPendaftar.error);
+    }
+
+    /* ---- Kursus ---- */
+    if (resKursus && resKursus.courses) {
+      KURSUS_DATA = resKursus.courses.map(c => ({
+        id       : String(c.id),
+        emoji    : c.emoji || '📚',
+        nama     : c.name  || c.nama || '',
+        kategori : c.cat   || c.kategori || '',
+        modul    : Array.isArray(c.tags) ? c.tags[0] : (c.modul || ''),
+        akses    : Array.isArray(c.tags) ? c.tags[1] : (c.akses || ''),
+        harga    : c.harga ? 'Rp ' + Number(c.harga).toLocaleString('id-ID') : '',
+        hargaNum : Number(c.harga) || 0,
+        pendaftar: allData.filter(d => d.kursus === (c.name || c.nama || '')).length,
+      }));
+      curKursus = KURSUS_DATA.length ? KURSUS_DATA[0].id : '';
+    }
+
+    if (resChat && resChat.threads) {
+      CHAT_THREADS = resChat.threads;
+    }
+
+    renderAll();
+    setSyncStatus('ok', '✓ Data Google Sheets');
+
+    // Load materi kursus pertama di background
+    if (curKursus) loadMateriFromSheet(curKursus);
+
+  } catch (err) {
+    console.error('loadAllData error:', err);
+    setSyncStatus('err', '⚠️ Gagal terhubung');
+    showToast('⚠️ Gagal memuat data: ' + err.message + '. Pastikan scriptUrl sudah benar dan script sudah di-deploy.');
+    // Tetap render UI kosong agar tidak blank
+    renderAll();
+  }
+}
+
+async function loadMateriFromSheet(kursusId) {
+  if (!kursusId) return;
+  try {
+    const data = await apiFetch({ action: 'getMateri', kursusId: kursusId });
+    if (data && data.materi) {
+      MATERI_DATA[kursusId] = data.materi.map(m => ({
+        id       : parseInt(m.id) || 1,
+        judul    : String(m.judul    || ''),
+        section  : String(m.section  || ''),
+        durasi   : String(m.durasi   || ''),
+        videoUrl : String(m.videoUrl || ''),
+        pdfUrl   : String(m.pdfUrl   || ''),
+        teks     : String(m.teks     || ''),
+        terkunci : !!m.terkunci,
+        quiz     : Array.isArray(m.quiz) ? m.quiz : [],
+      }));
+    }
+  } catch (err) {
+    console.error('loadMateri error:', err);
+  }
+}
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+function renderAll() {
+  renderStats();
+  renderTblRecent();
+  renderTblAll(allData);
+  renderKursus();
+  renderMateriSelects();
+  renderChatThreads();
+  setupFilters();
+}
+
+function renderStats() {
+  const tot   = allData.length;
+  const pend  = allData.filter(d => d.status === 'pending').length;
+  const verif = allData.filter(d => d.status === 'verified').length;
+
+  // Hitung pendapatan bulan ini dari data verified
+  const now   = new Date();
+  const rev   = allData
+    .filter(d => d.status === 'verified')
+    .reduce((s, d) => s + parseInt((d.nominal || '').replace(/\D/g, '') || 0), 0);
+
+  document.getElementById('stTotal').textContent = tot;
+  document.getElementById('stPend').textContent  = pend;
+  document.getElementById('stVerif').textContent = verif;
+  document.getElementById('stRev').textContent   = rev >= 1e6
+    ? 'Rp ' + (rev / 1e6).toFixed(1) + 'jt'
+    : 'Rp ' + rev.toLocaleString('id-ID');
+}
+
+function makeRow(d) {
+  const bc = d.status === 'pending' ? 'pending' : d.status === 'verified' ? 'verified' : 'rejected';
+  const bt = d.status === 'pending' ? 'Menunggu'  : d.status === 'verified' ? 'Verified' : 'Ditolak';
+  const ab = d.status === 'pending'
+    ? `<button class="abtn rev" onclick="openModal('${d.id}')">Tinjau</button>`
+    : `<button class="abtn done" disabled>Selesai</button>`;
+  return `
+    <div class="tr" id="row_${d.id}">
+      <div><div class="nm">${esc(d.nama)}</div><div class="em">${esc(d.email)}</div></div>
+      <div style="font-size:12px;color:var(--txm)">${esc(d.kursus)}</div>
+      <div style="font-size:12px;color:var(--txl)">${esc(d.tanggal)}</div>
+      <div style="font-size:13px;font-weight:600">${esc(d.nominal)}</div>
+      <div><span class="bdg ${bc}">${bt}</span></div>
+      <div>${ab}</div>
+    </div>`;
+}
+
+function renderTblRecent() {
+  const el = document.getElementById('tblRecent');
+  if (!allData.length) { el.innerHTML = '<div class="empty-state">Belum ada pendaftar.</div>'; return; }
+  el.innerHTML = allData.slice(0, 6).map(makeRow).join('');
+}
+
+function renderTblAll(data) {
+  const el = document.getElementById('tblAll');
+  if (!data.length) { el.innerHTML = '<div class="empty-state">Tidak ada data yang cocok.</div>'; return; }
+  el.innerHTML = data.map(makeRow).join('');
+}
+
+function renderKursus() {
+  const el = document.getElementById('kGrid');
+  if (!KURSUS_DATA.length) { el.innerHTML = '<div class="empty-state">Belum ada data kursus.</div>'; return; }
+  el.innerHTML = KURSUS_DATA.map(c => `
+    <div class="k-card">
+      <div class="k-head">
+        <div class="k-emoji">${c.emoji}</div>
+        <div>
+          <div class="k-name">${esc(c.nama)}</div>
+          <div class="k-meta">${esc(c.kategori)} · ${esc(c.modul)} · ${esc(c.akses)}</div>
+          <div class="k-price">${esc(c.harga)}</div>
+        </div>
+      </div>
+      <div class="k-body">
+        <div class="k-stat-row"><span>Pendaftar</span><span class="k-stat-val">${c.pendaftar} siswa</span></div>
+        <div class="k-stat-row"><span>Modul tersedia</span><span class="k-stat-val">${(MATERI_DATA[c.id] || []).length} modul</span></div>
+        <div class="k-actions">
+          <button class="btn-edit-k" onclick="showToast('Edit info di Google Sheets — tab Kursus')">Edit Info</button>
+          <button class="btn-materi" onclick="goToMateri('${c.id}')">Edit Materi →</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderMateriSelects() {
+  const sel = document.getElementById('selKursus');
+  if (!KURSUS_DATA.length) { sel.innerHTML = '<option>Belum ada kursus</option>'; return; }
+  sel.innerHTML = KURSUS_DATA.map(c => `<option value="${c.id}">${esc(c.nama)}</option>`).join('');
+  if (curKursus) sel.value = curKursus;
+}
+
+function setupFilters() {
+  const sel = document.getElementById('fKr');
+  const unique = [...new Set(allData.map(d => d.kursus).filter(Boolean))];
+  sel.innerHTML = '<option value="">Semua Kursus</option>' +
+    unique.map(k => `<option value="${esc(k)}">${esc(k)}</option>`).join('');
+}
+
+/* ================================================================
+   FILTER TABEL
+   ================================================================ */
+function filterTbl() {
+  const q  = document.getElementById('srch').value.toLowerCase();
+  const st = document.getElementById('fSt').value;
+  const kr = document.getElementById('fKr').value;
+  const filtered = allData.filter(d =>
+    (!q  || d.nama.toLowerCase().includes(q) || d.email.toLowerCase().includes(q)) &&
+    (!st || d.status === st) &&
+    (!kr || d.kursus === kr)
+  );
+  renderTblAll(filtered);
+}
+
+/* ================================================================
+   MODAL VERIFIKASI
+   ================================================================ */
+function openModal(id) {
+  curId = id;
+  const d = allData.find(x => x.id === id);
+  if (!d) return;
+
+  const buktiHtml = d.fileBukti
+    ? `<a href="${d.fileBukti}" target="_blank" style="color:var(--brand);font-size:13px;font-weight:600">🖼 Lihat Bukti Transfer →</a>`
+    : `<div style="font-size:12px;color:var(--txl)">File bukti tidak tersedia atau belum diunggah</div>`;
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="drow"><span class="dlbl">No. Pendaftaran</span><span class="dval">${esc(d.id)}</span></div>
+    <div class="drow"><span class="dlbl">Nama</span><span class="dval">${esc(d.nama)}</span></div>
+    <div class="drow"><span class="dlbl">Email</span><span class="dval">${esc(d.email)}</span></div>
+    <div class="drow"><span class="dlbl">WhatsApp</span><span class="dval">${esc(d.wa)}</span></div>
+    <div class="drow"><span class="dlbl">Kota</span><span class="dval">${esc(d.kota || '—')}</span></div>
+    <div class="drow"><span class="dlbl">Kursus</span><span class="dval">${esc(d.kursus)}</span></div>
+    <div class="drow"><span class="dlbl">Nominal Transfer</span><span class="dval" style="color:var(--brand);font-weight:700">${esc(d.nominal)}</span></div>
+    <div class="drow"><span class="dlbl">Tanggal Daftar</span><span class="dval">${esc(d.tanggal)}</span></div>
+    <div class="drow"><span class="dlbl">Sumber</span><span class="dval">${esc(d.sumber || '—')}</span></div>
+    <div class="bukti-box">${buktiHtml}</div>`;
+
+  document.getElementById('modalBg').classList.add('on');
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('on');
+  curId = null;
+}
+
+async function updateStatus(status) {
+  if (!curId) return;
+  const idx = allData.findIndex(d => d.id === curId);
+  if (idx < 0) return;
+
+  const d          = allData[idx];
+  const prevStatus = d.status;
+  closeModal();
+
+  // Optimistic update UI dulu
+  allData[idx].status = status;
+  renderAll();
+  showToast('⏳ ' + (status === 'verified' ? 'Memverifikasi & mengirim akses...' : 'Mengirim notifikasi penolakan...'));
+
+  try {
+    const res = await apiPost({
+      action : 'updateStatus',
+      id     : d.id,
+      status : status,
+    });
+
+    if (res && res.success) {
+      showToast(status === 'verified'
+        ? '✓ Diverifikasi! Token akses dikirim ke ' + d.email
+        : '✓ Ditolak. Notifikasi dikirim ke ' + d.email);
+    } else {
+      throw new Error(res && res.error ? res.error : 'Response tidak valid');
+    }
+  } catch (err) {
+    console.error('updateStatus error:', err);
+    // Rollback UI
+    allData[idx].status = prevStatus;
+    renderAll();
+    showToast('⚠️ Gagal update: ' + err.message);
+  }
+}
+
+/* ================================================================
+   MATERI EDITOR
+   ================================================================ */
+async function goToMateri(kursusId) {
+  curKursus   = kursusId;
+  curModIdx   = 0;
+  showPage('materi', document.querySelectorAll('.nav-item')[3]);
+  document.getElementById('selKursus').value = kursusId;
+
+  if (!MATERI_DATA[kursusId]) {
+    document.getElementById('materiForm').innerHTML = '<div class="loading-row">Memuat materi dari Sheets...</div>';
+    await loadMateriFromSheet(kursusId);
+  }
+  renderMateriSb();
+  const mods = MATERI_DATA[kursusId] || [];
+  if (mods.length) renderMateriForm(0);
+  else document.getElementById('materiForm').innerHTML = '<div class="empty-state">Belum ada modul. Klik "+ Modul" untuk menambah.</div>';
+}
+
+async function loadMateriKursus() {
+  curKursus = document.getElementById('selKursus').value;
+  curModIdx = 0;
+  if (!MATERI_DATA[curKursus]) {
+    document.getElementById('materiForm').innerHTML = '<div class="loading-row">Memuat materi...</div>';
+    await loadMateriFromSheet(curKursus);
+  }
+  renderMateriSb();
+  const mods = MATERI_DATA[curKursus] || [];
+  if (mods.length) renderMateriForm(0);
+  else document.getElementById('materiForm').innerHTML = '<div class="empty-state">Belum ada modul. Klik "+ Modul".</div>';
+}
+
+function renderMateriSb() {
+  const mods = MATERI_DATA[curKursus] || [];
+  document.getElementById('modulSb').innerHTML = mods.length
+    ? mods.map((m, i) => `
+        <div class="mod-row${i === curModIdx ? ' active' : ''}" onclick="selectMod(${i})">
+          <div class="mod-num-badge">${m.id}</div>
+          <div class="mod-row-title">${esc(m.judul || 'Modul tanpa judul')}</div>
+          ${m.quiz && m.quiz.length ? `<span style="font-size:10px;background:var(--bl);color:var(--brand);padding:1px 6px;border-radius:10px;font-weight:700">${m.quiz.length}Q</span>` : ''}
+          <button class="mod-row-del" onclick="event.stopPropagation();delMod(${i})" title="Hapus">✕</button>
+        </div>`).join('')
+    : '<div class="empty-state">Belum ada modul</div>';
+}
+
+function selectMod(i) { curModIdx = i; renderMateriSb(); renderMateriForm(i); }
+
+function renderMateriForm(i) {
+  const mods = MATERI_DATA[curKursus] || [];
+  const m    = mods[i];
+  if (!m) return;
+
+  const kNama = (KURSUS_DATA.find(k => k.id === curKursus) || {}).nama || '';
+  document.getElementById('materiForm').innerHTML = `
+    <div class="materi-form">
+      <div class="form-title-ed">
+        <span>Modul ${m.id}: ${esc(m.judul || '—')}</span>
+        <span style="font-size:11px;color:var(--txl);font-weight:400">${esc(kNama)}</span>
+      </div>
+      <div class="fg-row2">
+        <div class="fg"><label>Judul Modul <span>*</span></label><input type="text" id="fJudul" value="${esc(m.judul)}"></div>
+        <div class="fg"><label>Section / Bab</label><input type="text" id="fSection" value="${esc(m.section)}"></div>
+      </div>
+      <div class="fg-row2">
+        <div class="fg"><label>Durasi (menit)</label><input type="number" id="fDurasi" value="${esc(m.durasi)}" min="1"></div>
+        <div class="fg"><label>Status Modul</label>
+          <select id="fLocked">
+            <option value="false" ${!m.terkunci ? 'selected' : ''}>Terbuka — siswa bisa akses</option>
+            <option value="true"  ${m.terkunci  ? 'selected' : ''}>Terkunci — belum tersedia</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label>URL Video (YouTube Embed)</label>
+        <input type="url" id="fVideo" value="${esc(m.videoUrl)}" placeholder="https://www.youtube.com/embed/VIDEO_ID">
+        <div class="fg-hint">Ubah format: /watch?v=ID → /embed/ID</div>
+      </div>
+      <div class="fg">
+        <label>URL PDF / File Materi (Google Drive)</label>
+        <input type="url" id="fPdf" value="${esc(m.pdfUrl)}" placeholder="https://drive.google.com/file/d/FILE_ID/view">
+        <div class="fg-hint">Share file → "Anyone with link" → salin URL</div>
+      </div>
+      <div class="fg">
+        <label>Konten Teks (HTML sederhana: &lt;h3&gt; &lt;p&gt; &lt;ul&gt; &lt;strong&gt;)</label>
+        <textarea id="fTeks" rows="5">${esc(m.teks)}</textarea>
+      </div>
+      <div class="quiz-editor">
+        <div class="qe-title">
+          <span>Soal Kuis (${(m.quiz || []).length} soal)</span>
+          <button class="btn-add-q" onclick="addSoal()">+ Tambah Soal</button>
+        </div>
+        <div id="quizEditorBody">${renderQuizEditor(m.quiz || [])}</div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveMateri()">💾 Simpan Materi</button>
+        <button class="btn-cancel" onclick="selectMod(${i})">Reset</button>
+        <div class="save-ok" id="saveOk">✓ Tersimpan ke Sheets!</div>
+      </div>
+    </div>`;
+}
+
+function renderQuizEditor(quiz) {
+  if (!quiz.length) return `<div style="padding:16px;text-align:center;color:var(--txl);font-size:12px;border:1px dashed var(--br);border-radius:var(--rs)">Belum ada soal. Klik "+ Tambah Soal" untuk menambah.</div>`;
+  const L = ['A','B','C','D'];
+  return quiz.map((q, qi) => `
+    <div class="qe-item" id="qei${qi}">
+      <div class="qe-num">Soal ${qi + 1}</div>
+      <button class="qe-del" onclick="delSoal(${qi})">✕</button>
+      <div class="fg"><label>Pertanyaan</label><input type="text" id="qq${qi}" value="${esc(q.q || '')}" placeholder="Tulis pertanyaan..."></div>
+      <div class="qe-opts">
+        ${(q.opts || ['','','','']).map((o, oi) => `
+          <div class="qe-opt-row">
+            <span class="qe-opt-lbl">${L[oi]}</span>
+            <input type="text" id="qo${qi}_${oi}" value="${esc(o)}" placeholder="Opsi ${L[oi]}">
+          </div>`).join('')}
+      </div>
+      <div class="ans-row">
+        Jawaban benar:
+        <select id="qa${qi}">
+          ${L.map((l, li) => `<option value="${li}" ${q.ans === li ? 'selected' : ''}>${l}</option>`).join('')}
+        </select>
+      </div>
+      <div class="expl-row">
+        <div class="fg"><label>Penjelasan (opsional)</label><textarea id="qe${qi}">${esc(q.exp || '')}</textarea></div>
+      </div>
+    </div>`).join('');
+}
+
+function addSoal() {
+  const mods = MATERI_DATA[curKursus] || [];
+  if (!mods[curModIdx]) return;
+  mods[curModIdx].quiz.push({ q:'', opts:['','','',''], ans:0, exp:'' });
+  document.getElementById('quizEditorBody').innerHTML = renderQuizEditor(mods[curModIdx].quiz);
+}
+
+function delSoal(qi) {
+  const mods = MATERI_DATA[curKursus] || [];
+  if (!mods[curModIdx] || !confirm('Hapus soal ini?')) return;
+  mods[curModIdx].quiz.splice(qi, 1);
+  document.getElementById('quizEditorBody').innerHTML = renderQuizEditor(mods[curModIdx].quiz);
+}
+
+function addModul() {
+  if (!MATERI_DATA[curKursus]) MATERI_DATA[curKursus] = [];
+  const mods  = MATERI_DATA[curKursus];
+  const newId = mods.length ? Math.max(...mods.map(m => m.id)) + 1 : 1;
+  mods.push({ id:newId, judul:'Modul Baru ' + newId, section:'', durasi:'', videoUrl:'', pdfUrl:'', teks:'', terkunci:false, quiz:[] });
+  curModIdx = mods.length - 1;
+  renderMateriSb();
+  renderMateriForm(curModIdx);
+  showToast('Modul baru ditambahkan — isi detail dan simpan');
+}
+
+function delMod(i) {
+  const mods = MATERI_DATA[curKursus] || [];
+  if (!confirm('Hapus modul "' + (mods[i] && mods[i].judul) + '"?')) return;
+  mods.splice(i, 1);
+  curModIdx = Math.max(0, i - 1);
+  renderMateriSb();
+  if (mods.length) renderMateriForm(curModIdx);
+  else document.getElementById('materiForm').innerHTML = '<div class="empty-state">Semua modul dihapus. Klik "+ Modul" untuk menambah.</div>';
+  showToast('Modul dihapus');
+}
+
+async function saveMateri() {
+  const mods = MATERI_DATA[curKursus] || [];
+  const m    = mods[curModIdx];
+  if (!m) return;
+
+  // Ambil semua nilai dari form
+  m.judul    = (document.getElementById('fJudul')  || {}).value || m.judul;
+  m.section  = (document.getElementById('fSection') || {}).value || '';
+  m.durasi   = (document.getElementById('fDurasi')  || {}).value || '';
+  m.terkunci = (document.getElementById('fLocked')  || {}).value === 'true';
+  m.videoUrl = (document.getElementById('fVideo')   || {}).value || '';
+  m.pdfUrl   = (document.getElementById('fPdf')     || {}).value || '';
+  m.teks     = (document.getElementById('fTeks')    || {}).value || '';
+
+  // Kumpulkan soal kuis dari form
+  m.quiz = m.quiz.map((q, qi) => ({
+    q    : (document.getElementById('qq' + qi)       || {}).value || q.q,
+    opts : [0,1,2,3].map(oi => (document.getElementById('qo' + qi + '_' + oi) || {}).value || ''),
+    ans  : parseInt((document.getElementById('qa' + qi) || {}).value ?? q.ans),
+    exp  : (document.getElementById('qe' + qi)       || {}).value || '',
+  }));
+
+  const saveBtn = document.querySelector('.btn-save');
+  saveBtn.textContent = '⏳ Menyimpan...';
+  saveBtn.disabled = true;
+
+  try {
+    const res = await apiPost({
+      action   : 'saveMateri',
+      kursusId : curKursus,
+      modul    : m,
+    });
+
+    if (res && res.success) {
+      const ok = document.getElementById('saveOk');
+      if (ok) { ok.style.display = 'block'; setTimeout(() => ok.style.display = 'none', 3000); }
+      renderMateriSb(); // perbarui badge jumlah soal
+      showToast('✓ Modul "' + m.judul + '" berhasil disimpan ke Sheets');
+    } else {
+      throw new Error(res && res.error ? res.error : 'Response tidak valid');
+    }
+  } catch (err) {
+    console.error('saveMateri error:', err);
+    showToast('⚠️ Gagal simpan: ' + err.message);
+  } finally {
+    saveBtn.textContent = '💾 Simpan Materi';
+    saveBtn.disabled = false;
+  }
+}
+
+/* ================================================================
+   EXPORT CSV
+   ================================================================ */
+function exportCSV() {
+  if (!allData.length) { showToast('Tidak ada data untuk diekspor'); return; }
+  const h    = ['ID','Nama','Email','WhatsApp','Kota','Kursus','Tanggal','Nominal','Status','Sumber'];
+  const rows = allData.map(d => [d.id,d.nama,d.email,d.wa,d.kota,d.kursus,d.tanggal,d.nominal,d.status,d.sumber].map(v => '"' + String(v||'').replace(/"/g,'""') + '"'));
+  const csv  = [h, ...rows].map(r => r.join(',')).join('\n');
+  const a    = document.createElement('a');
+  a.href     = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = 'pendaftar_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  showToast('✓ CSV berhasil diunduh (' + allData.length + ' baris)');
+}
+
+/* ================================================================
+   CHAT
+   ================================================================ */
+async function loadChatThreads() {
+  try {
+    const data = await apiFetch({ action:'getChatThreads' });
+    CHAT_THREADS = data.threads || [];
+    renderChatThreads();
+    if (curThreadId) loadChatMessages(curThreadId, true);
+  } catch (err) {
+    console.error('loadChatThreads error:', err);
+  }
+}
+
+function renderChatThreads() {
+  const el = document.getElementById('chatList');
+  if (!el) return;
+  if (!CHAT_THREADS.length) {
+    el.innerHTML = '<div class="chat-empty">Belum ada percakapan dari siswa.</div>';
+    return;
+  }
+  el.innerHTML = CHAT_THREADS.map(t => {
+    const initials = String(t.nama || t.email || '?').split(' ').map(x => x[0]).join('').slice(0,2).toUpperCase();
+    const unread = Number(t.unreadAdmin || 0);
+    return `
+      <div class="chat-thread ${t.id === curThreadId ? 'active' : ''}" onclick="openChatThread('${escAttr(t.id)}')">
+        <div class="chat-avatar">${esc(initials)}</div>
+        <div class="chat-thread-main">
+          <div class="chat-thread-top"><span class="chat-thread-name">${esc(t.nama || t.email)}</span><span class="chat-thread-time">${chatTime(t.lastAt)}</span></div>
+          <div class="chat-thread-sub">${esc(t.kursus || t.email || '')}${unread ? `<span class="chat-unread">${unread}</span>` : ''}</div>
+          <div class="chat-thread-last">${esc(t.lastMessage || 'Belum ada pesan')}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function openChatThread(threadId) {
+  curThreadId = threadId;
+  renderChatThreads();
+  await loadChatMessages(threadId);
+}
+
+async function loadChatMessages(threadId, silent) {
+  try {
+    const data = await apiFetch({ action:'getChatMessages', threadId:threadId });
+    CHAT_MESSAGES = data.messages || [];
+    renderChatRoom(data.thread);
+    await apiPost({ action:'markChatRead', threadId:threadId, reader:'admin' });
+    if (!silent) loadChatThreads();
+  } catch (err) {
+    console.error('loadChatMessages error:', err);
+    if (!silent) showToast('Gagal memuat chat: ' + err.message);
+  }
+}
+
+function renderChatRoom(thread) {
+  const title = document.getElementById('chatRoomTitle');
+  const sub = document.getElementById('chatRoomSub');
+  const closeBtn = document.getElementById('btnCloseChat');
+  const input = document.getElementById('adminChatInput');
+  const send = document.getElementById('adminChatSend');
+  const body = document.getElementById('chatMessages');
+
+  if (!thread) {
+    title.textContent = 'Pilih percakapan';
+    sub.textContent = 'Balas pertanyaan siswa dari sini.';
+    closeBtn.style.display = 'none';
+    input.disabled = true;
+    send.disabled = true;
+    body.innerHTML = '<div class="chat-empty">Pilih siswa di sebelah kiri untuk membaca pesan.</div>';
+    return;
+  }
+
+  title.textContent = thread.nama || thread.email;
+  sub.textContent = (thread.kursus || 'Siswa') + ' · ' + thread.email + ' · ' + (thread.status || 'open');
+  closeBtn.style.display = 'inline-block';
+  input.disabled = false;
+  send.disabled = false;
+
+  body.innerHTML = CHAT_MESSAGES.length ? CHAT_MESSAGES.map(m => `
+    <div class="chat-msg ${m.sender === 'admin' ? 'admin' : 'siswa'}">
+      <div>${esc(m.message)}</div>
+      <div class="chat-meta">${m.sender === 'admin' ? 'Admin' : esc(m.senderName || 'Siswa')} · ${chatTime(m.timestamp)}</div>
+    </div>
+  `).join('') : '<div class="chat-empty">Belum ada pesan.</div>';
+  body.scrollTop = body.scrollHeight;
+}
+
+async function sendAdminMessage(ev) {
+  ev.preventDefault();
+  if (!curThreadId) return;
+  const input = document.getElementById('adminChatInput');
+  const btn = document.getElementById('adminChatSend');
+  const msg = input.value.trim();
+  if (!msg) return;
+  btn.disabled = true;
+  try {
+    const res = await apiPost({ action:'sendChatMessage', threadId:curThreadId, sender:'admin', senderName:'Admin', message:msg });
+    if (res && res.success) {
+      input.value = '';
+      await loadChatMessages(curThreadId);
+    } else {
+      throw new Error(res && res.error ? res.error : 'Gagal mengirim pesan');
+    }
+  } catch (err) {
+    showToast('Gagal mengirim chat: ' + err.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function closeSelectedChat() {
+  if (!curThreadId) return;
+  try {
+    const res = await apiPost({ action:'closeChatThread', threadId:curThreadId });
+    if (res && res.success) {
+      showToast('Chat ditutup');
+      await loadChatThreads();
+    } else {
+      throw new Error(res && res.error ? res.error : 'Gagal menutup chat');
+    }
+  } catch (err) {
+    showToast('Gagal menutup chat: ' + err.message);
+  }
+}
+
+function chatTime(value) {
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value || '';
+  return d.toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+}
+
+function escAttr(str) {
+  return String(str || '').replace(/\\/g,'\\\\').replace(/'/g,'\\&#39;');
+}
+
+/* ================================================================
+   NAVIGASI
+   ================================================================ */
+function showPage(page, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pgEl = document.getElementById('pg' + page.charAt(0).toUpperCase() + page.slice(1));
+  if (pgEl) pgEl.classList.add('on');
+  if (navEl) navEl.classList.add('active');
+  const titles = { dashboard:'Dashboard', pendaftar:'Kelola Pendaftar', kursus:'Kelola Kursus', materi:'Edit Materi', chat:'Chat Siswa' };
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+  if (page === 'chat') loadChatThreads();
+}
+
+/* ================================================================
+   UTILS
+   ================================================================ */
+function esc(str) {
+  // Escape HTML untuk mencegah XSS dari data Sheets
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 3500);
+}
+
+/* ================================================================
+   EVENT LISTENERS
+   ================================================================ */
+document.getElementById('modalBg').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalBg')) closeModal();
+});
+document.getElementById('lp').addEventListener('keyup', e => {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>

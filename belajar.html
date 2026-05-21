@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Belajar — AkademiPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* (salin semua style dari kode belajar.html Anda, sama persis) */
+:root{--brand:#1a6b4a;--brand2:#2d9668;--bl:#e8f5ee;--bm:#9fe1cb;--acc:#f0a500;--tx:#121c17;--txm:#4a6055;--txl:#8fa89d;--bg:#f5f9f7;--wh:#fff;--br:#d8e8e1;--r:14px;--rs:8px;--fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
+.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,var(--brand) 0%,#0f4a33 100%)}
+.lb{background:var(--wh);border-radius:var(--r);padding:36px;width:100%;max-width:380px}
+.lb-logo{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--brand);margin-bottom:4px}
+.lb-logo span{color:var(--acc)}
+.lb-sub{font-size:13px;color:var(--txl);margin-bottom:24px}
+.lb h2{font-family:var(--fh);font-size:17px;margin-bottom:18px}
+.lb input{width:100%;padding:11px 14px;border:1.5px solid var(--br);border-radius:var(--rs);font-size:14px;font-family:var(--fb);margin-bottom:12px;outline:none;transition:border-color .2s}
+.lb input:focus{border-color:var(--brand)}
+.lb-btn{width:100%;background:var(--brand);color:#fff;border:none;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.lb-btn:hover{background:var(--brand2)}
+.lb-err{font-size:12px;color:#e05252;margin-top:8px;display:none;text-align:center}
+.lb-help{font-size:11px;color:var(--txl);text-align:center;margin-top:12px}
+.lb-help a{color:var(--brand)}
+.app{display:none;height:100vh;overflow:hidden}
+.app.on{display:flex}
+.sb{width:260px;background:var(--wh);border-right:1px solid var(--br);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+.sb-top{padding:16px;border-bottom:1px solid var(--br)}
+.sb-brand{font-family:var(--fh);font-size:14px;font-weight:700;color:var(--brand);margin-bottom:10px}
+.sb-brand span{color:var(--acc)}
+.u-row{display:flex;align-items:center;gap:10px}
+.u-av{width:36px;height:36px;border-radius:50%;background:var(--bl);color:var(--brand);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fh)}
+.u-name{font-size:13px;font-weight:600}
+.u-course{font-size:11px;color:var(--txl)}
+.prog-sec{padding:12px 16px;border-bottom:1px solid var(--br)}
+.prog-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--txl);margin-bottom:6px}
+.prog-bg{background:var(--br);border-radius:4px;height:5px}
+.prog-fill{height:5px;border-radius:4px;background:var(--brand);transition:width .5s}
+.m-list{flex:1;padding:10px 8px;overflow-y:auto}
+.m-sec-lbl{font-size:10px;font-weight:700;color:var(--txl);text-transform:uppercase;letter-spacing:1.5px;padding:8px 8px 4px}
+.m-item{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:var(--rs);cursor:pointer;transition:background .15s;margin-bottom:2px}
+.m-item:hover{background:var(--bg)}
+.m-item.active{background:var(--bl)}
+.m-item.locked{opacity:.4;cursor:not-allowed}
+.m-ic{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;background:var(--bg);color:var(--txl);font-weight:700}
+.m-item.done .m-ic{background:var(--bl);color:var(--brand)}
+.m-item.active .m-ic{background:var(--brand);color:#fff}
+.m-txt{flex:1;min-width:0}
+.m-title{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-dur{font-size:10px;color:var(--txl)}
+.m-item.active .m-title{color:var(--brand);font-weight:600}
+.sb-bot{padding:12px 16px;border-top:1px solid var(--br)}
+.exp-b{background:var(--bl);border-radius:var(--rs);padding:8px 12px;font-size:11px;color:var(--txm)}
+.exp-b strong{color:var(--brand);display:block;font-size:13px}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--wh);border-bottom:1px solid var(--br);flex-shrink:0}
+.tb-bc{font-size:13px;color:var(--txl)}
+.tb-bc strong{color:var(--tx)}
+.hbg{display:none;background:none;border:none;font-size:18px;cursor:pointer;color:var(--tx)}
+.lo-btn{font-size:12px;color:var(--txl);background:none;border:1px solid var(--br);padding:6px 14px;border-radius:20px;cursor:pointer;font-family:var(--fb)}
+.lo-btn:hover{color:#e05252;border-color:#e05252}
+.ca{flex:1;padding:28px 32px;max-width:860px;width:100%}
+.mod-num{font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.mod-title{font-family:var(--fh);font-size:22px;font-weight:700;margin-bottom:8px}
+.mod-meta{display:flex;gap:16px;font-size:12px;color:var(--txl);margin-bottom:20px;flex-wrap:wrap}
+.ctabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--br)}
+.ctab{padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--txl);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:var(--fb);transition:all .2s;display:flex;align-items:center;gap:6px}
+.ctab.active{color:var(--brand);border-bottom-color:var(--brand)}
+.ctab.qa.active{color:var(--acc);border-bottom-color:var(--acc)}
+.ctab:hover:not(.active){color:var(--tx)}
+.ctab .badge{background:#fff3cd;color:#856404;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700}
+.ctab .badge.ok{background:var(--bl);color:#0a5c38}
+.vid-wrap{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#0a3d26,#1a6b4a);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin-bottom:16px;overflow:hidden}
+.vid-wrap iframe{width:100%;height:100%;border:none}
+.vid-ph{text-align:center;color:#fff}
+.play-c{width:64px;height:64px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px}
+.vid-note{font-size:12px;color:var(--txl);padding:12px;background:var(--bl);border-radius:var(--rs);margin-bottom:16px}
+.pdf-card{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.pdf-ic{width:44px;height:52px;background:linear-gradient(135deg,#e05252,#c03c3c);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0}
+.pdf-info{flex:1}
+.pdf-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.pdf-meta{font-size:12px;color:var(--txl)}
+.btn-dl{background:var(--brand);color:#fff;border:none;padding:8px 18px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb);text-decoration:none;display:inline-block}
+.teks{font-size:15px;line-height:1.8;color:var(--tx)}
+.teks h3{font-family:var(--fh);font-size:17px;font-weight:600;margin:20px 0 10px}
+.teks h3:first-child{margin-top:0}
+.teks p{margin-bottom:14px}
+.teks ul{margin:0 0 14px 20px}
+.teks li{margin-bottom:6px}
+.teks .hl{background:var(--bl);border-left:3px solid var(--brand);padding:12px 16px;margin:16px 0}
+.qwrap{max-width:640px}
+.qhdr{margin-bottom:20px}
+.qtitle{font-family:var(--fh);font-size:17px;font-weight:700;margin-bottom:4px}
+.qsub{font-size:13px;color:var(--txm)}
+.qprog-bg{background:var(--br);border-radius:4px;height:4px;margin:10px 0 4px}
+.qprog-fill{height:4px;border-radius:4px;background:var(--acc);transition:width .4s}
+.qctr{font-size:12px;color:var(--txl);display:flex;justify-content:space-between;margin-bottom:16px}
+.qcard{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:22px;margin-bottom:14px}
+.qnum{font-size:11px;font-weight:700;color:var(--txl);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.qtext{font-size:15px;font-weight:500;margin-bottom:16px;line-height:1.5}
+.qopts{display:flex;flex-direction:column;gap:8px}
+.qopt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:1.5px solid var(--br);border-radius:var(--rs);cursor:pointer;transition:all .15s;font-size:14px;color:var(--tx);background:var(--wh);font-family:var(--fb);text-align:left;width:100%}
+.qopt:hover:not(:disabled){border-color:var(--brand2);background:var(--bl)}
+.qopt:disabled{cursor:default}
+.qopt.correct{border-color:var(--brand);background:var(--bl);color:var(--brand)}
+.qopt.wrong{border-color:#e05252;background:#ffeaea;color:#c03030}
+.qopt.missed{border-color:var(--brand);background:#f0fff8;color:var(--brand)}
+.qltr{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.qopt.correct .qltr{background:var(--brand);color:#fff;border-color:var(--brand)}
+.qopt.wrong .qltr{background:#e05252;color:#fff;border-color:#e05252}
+.qopt.missed .qltr{background:var(--brand);color:#fff;border-color:var(--brand)}
+.qfb{margin-top:10px;padding:10px 14px;border-radius:0;font-size:13px;display:none}
+.qfb.show{display:block}
+.qfb.ok{background:var(--bl);color:#0f6e56;border-left:3px solid var(--brand)}
+.qfb.err{background:#ffeaea;color:#a32d2d;border-left:3px solid #e05252}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.btn-qnext{background:var(--brand);color:#fff;border:none;padding:10px 24px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-qnext:hover{background:var(--brand2)}
+.btn-qnext:disabled{background:var(--br);cursor:not-allowed;color:var(--txl)}
+.qresult{text-align:center;padding:28px 20px}
+.sring{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--brand)}
+.sring.fail{border-color:#e05252}
+.spct{font-family:var(--fh);font-size:28px;font-weight:700}
+.sring.pass .spct{color:var(--brand)}
+.sring.fail .spct{color:#e05252}
+.slbl{font-size:11px;color:var(--txl)}
+.rtitle{font-family:var(--fh);font-size:19px;font-weight:700;margin-bottom:6px}
+.rsub{font-size:13px;color:var(--txm);margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto}
+.sdetail{display:flex;justify-content:center;gap:28px;margin-bottom:22px}
+.sitem{text-align:center}
+.sitem strong{display:block;font-family:var(--fh);font-size:20px;font-weight:700}
+.sitem.c strong{color:var(--brand)}
+.sitem.w strong{color:#e05252}
+.sitem span{font-size:11px;color:var(--txl)}
+.btn-retry{background:none;border:1.5px solid var(--br);color:var(--txm);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb);margin-right:8px}
+.btn-nxtm{background:var(--brand);color:#fff;border:none;padding:10px 26px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-nxtm:hover{background:var(--brand2)}
+.btn-nxtm:disabled{background:var(--br);cursor:not-allowed;color:var(--txl)}
+.cnav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--br)}
+.btn-prev{background:var(--wh);color:var(--txm);border:1.5px solid var(--br);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-prev:disabled{opacity:.35;cursor:not-allowed}
+.btn-mark{background:var(--brand);color:#fff;border:none;padding:10px 26px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb)}
+.btn-mark:hover{background:var(--brand2)}
+.done-badge{display:flex;align-items:center;gap:8px;background:var(--bl);border-radius:var(--rs);padding:9px 14px;font-size:13px;color:var(--brand);font-weight:500;border:1px solid var(--bm);margin-bottom:16px}
+.chat-fab{position:fixed;right:22px;bottom:22px;z-index:250;background:var(--brand);color:#fff;border:none;border-radius:999px;padding:12px 18px;font:600 13px var(--fb);box-shadow:0 12px 28px rgba(12,89,62,.25);cursor:pointer;display:none;align-items:center;gap:8px}
+.chat-fab.on{display:flex}
+.chat-badge{min-width:18px;height:18px;border-radius:999px;background:var(--acc);color:#fff;font-size:10px;display:none;align-items:center;justify-content:center;padding:0 5px}
+.chat-badge.on{display:flex}
+.chat-panel{position:fixed;right:22px;bottom:78px;z-index:260;width:min(360px,calc(100vw - 32px));height:470px;background:var(--wh);border:1px solid var(--br);border-radius:var(--r);box-shadow:0 18px 50px rgba(22,36,30,.18);display:none;flex-direction:column;overflow:hidden}
+.chat-panel.on{display:flex}
+.chat-head{padding:14px 16px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.chat-title{font:700 14px var(--fh)}
+.chat-sub{font-size:11px;opacity:.82;margin-top:1px}
+.chat-close{background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:8px;width:30px;height:30px;cursor:pointer}
+.chat-body{flex:1;padding:14px;overflow-y:auto;background:#f7faf8;display:flex;flex-direction:column;gap:10px}
+.chat-empty{text-align:center;color:var(--txl);font-size:13px;margin:auto;max-width:240px}
+.chat-msg{max-width:82%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.45;white-space:pre-wrap}
+.chat-msg.siswa{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.admin{align-self:flex-start;background:#fff;color:var(--tx);border:1px solid var(--br);border-bottom-left-radius:4px}
+.chat-meta{font-size:10px;opacity:.66;margin-top:4px}
+.chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--br);background:#fff}
+.chat-input{flex:1;min-height:42px;max-height:92px;resize:none;border:1px solid var(--br);border-radius:12px;padding:10px 12px;font:13px var(--fb);outline:none}
+.chat-send{background:var(--brand);color:#fff;border:0;border-radius:12px;padding:0 16px;font:700 13px var(--fb);cursor:pointer}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--tx);color:#fff;padding:12px 20px;border-radius:var(--rs);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999}
+.toast.on{opacity:1}
+@media(max-width:768px){.ca{padding:16px}.sb{position:fixed;inset:0 auto 0 0;z-index:100;transform:translateX(-100%);transition:transform .3s}.sb.open{transform:translateX(0)}.hbg{display:block}.app.on{display:block}.chat-fab{right:16px;bottom:16px}.chat-panel{right:16px;bottom:72px;height:min(480px,calc(100vh - 96px))}}
+</style>
+</head>
+<body>
+
+<div class="lw" id="lw">
+  <div class="lb">
+    <div class="lb-logo">Akademi<span>Pro</span></div>
+    <div class="lb-sub">Portal Belajar Siswa</div>
+    <h2>Masuk ke Akun Belajar</h2>
+    <input type="email" id="lemail" placeholder="Email pendaftaran">
+    <input type="text" id="ltoken" placeholder="Token akses (cek email kamu)" onkeyup="if(event.key==='Enter')doLogin()">
+    <button class="lb-btn" onclick="doLogin()">Mulai Belajar →</button>
+    <div class="lb-err" id="lerr">Email atau token tidak valid.</div>
+    <div class="lb-help">Demo: <strong>demo@akademi.id</strong> / <strong>DEMO2025</strong></div>
+    <div class="lb-help" style="margin-top:6px">Belum punya akses? <a href="index.html">Daftar di sini</a></div>
+  </div>
+</div>
+
+<div class="app" id="appEl">
+  <div class="sb" id="sbEl">
+    <div class="sb-top">
+      <div class="sb-brand">Akademi<span>Pro</span></div>
+      <div class="u-row">
+        <div class="u-av" id="uAv">RK</div>
+        <div><div class="u-name" id="uName">Rina</div><div class="u-course" id="uCourse">UI/UX Bootcamp</div></div>
+      </div>
+    </div>
+    <div class="prog-sec">
+      <div class="prog-lbl"><span>Progress</span><span id="progTxt">0/0</span></div>
+      <div class="prog-bg"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
+    </div>
+    <div class="m-list" id="mList"></div>
+    <div class="sb-bot">
+      <div class="exp-b"><strong id="expDate">Akses aktif</strong>Selamat belajar!</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="hbg" onclick="toggleSb()">☰</button>
+        <div class="tb-bc"><strong id="tbTitle">Modul</strong></div>
+      </div>
+      <button class="lo-btn" onclick="doLogout()">Keluar</button>
+    </div>
+    <div class="ca" id="ca"></div>
+  </div>
+</div>
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">Chat Admin <span class="chat-badge" id="chatBadge">0</span></button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <div><div class="chat-title">Chat Admin</div><div class="chat-sub">Tanya materi, akses, atau kendala belajar</div></div>
+    <button class="chat-close" onclick="toggleChat(false)">x</button>
+  </div>
+  <div class="chat-body" id="chatBody"><div class="chat-empty">Belum ada pesan. Kirim pertanyaan ke admin kapan saja.</div></div>
+  <form class="chat-form" onsubmit="sendStudentMessage(event)">
+    <textarea class="chat-input" id="chatInput" rows="1" placeholder="Tulis pesan..."></textarea>
+    <button class="chat-send" id="chatSend" type="submit">Kirim</button>
+  </form>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CFG = {
+  demoEmail: 'demo@akademi.id',
+  demoToken: 'DEMO2025',
+  scriptUrl: 'https://script.google.com/macros/s/AKfycby9IKljqOnN-JZUFUnP-_vSU9qzwpnFezypmJiaeIZOuh6Q8gf1P--2oxROiqbiUxY1zA/exec'
+};
+
+// ================================================================
+// FETCH HELPERS (sama seperti admin.html)
+// ================================================================
+async function apiFetch(params) {
+  const url = CFG.scriptUrl + '?' + new URLSearchParams(params);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+async function apiPost(body) {
+  const res = await fetch(CFG.scriptUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+// ================================================================
+// STATE
+// ================================================================
+let curMod = 0, curTab = 'video', progress = [], QS = {};
+let currentUser = null;
+let currentMods = [];
+let chatThreadId = '';
+let chatMessages = [];
+let chatTimer = null;
+
+// Demo data sebagai fallback
+const DEMO_MODS = [
+ {id:1,title:'Pengantar UI/UX Design',dur:'24 min',sec:'Dasar-Dasar',
+  video:{url:'https://www.youtube.com/embed/dQw4w9WgXcQ',cap:'Pengantar UI/UX — 24:37'},
+  pdf:{nama:'Slide Modul 1.pdf',url:'#',size:'2.4 MB',hal:18},
+  teks:`<h3>Apa itu UI/UX Design?</h3><p><strong>UI (User Interface)</strong> adalah tampilan visual produk digital. <strong>UX (User Experience)</strong> adalah keseluruhan pengalaman pengguna.</p>`,
+  quiz:[{q:'Apa kepanjangan dari UX?',opts:['User Xperience','User Experience','Ultra Experience','Unique Experience'],ans:1,exp:'UX = User Experience.'}]},
+ {id:2,title:'Design Thinking',dur:'31 min',sec:'Dasar-Dasar',locked:true,
+  video:{url:'',cap:''},pdf:{nama:'',url:'',size:'',hal:0},teks:'',quiz:[]},
+];
+
+// ================================================================
+// LOGIN
+// ================================================================
+async function doLogin() {
+  const email = document.getElementById('lemail').value.trim().toLowerCase();
+  const token = document.getElementById('ltoken').value.trim().toUpperCase();
+  
+  // Demo account
+  if (email === CFG.demoEmail && token === CFG.demoToken) {
+    initAppWithData({
+      nama: 'Rina Kusuma',
+      email: email,
+      kursus: 'UI/UX Design Bootcamp',
+      expDate: '31 Des 2025',
+      progress: [true, false, false, false, false]
+    }, DEMO_MODS);
+    return;
+  }
+  
+  showToast('⏳ Memeriksa akses...');
+  
+  try {
+    // Cek akses ke server
+    const result = await apiFetch({ action: 'checkAccess', email: email, token: token });
+    
+    if (result && result.valid && result.user) {
+      const user = result.user;
+      
+      // Load materi untuk kursus ini
+      const materiData = await apiFetch({ action: 'getMateri', kursusId: user.kursusId });
+      
+      if (materiData && materiData.materi && materiData.materi.length) {
+        const serverMods = materiData.materi.map(mod => ({
+          id: mod.id,
+          title: mod.judul,
+          dur: mod.durasi + ' min',
+          sec: mod.section || 'Modul',
+          locked: mod.terkunci || false,
+          video: { url: mod.videoUrl || '', cap: mod.judul },
+          pdf: { 
+            nama: mod.pdfUrl ? 'Materi ' + mod.judul + '.pdf' : '', 
+            url: mod.pdfUrl || '#', 
+            size: '1 MB', 
+            hal: 10 
+          },
+          teks: mod.teks || '<p>Konten sedang disiapkan.</p>',
+          quiz: mod.quiz || []
+        }));
+        
+        initAppWithData({
+          nama: user.nama,
+          email: user.email,
+          kursus: user.kursus,
+          expDate: user.expDate,
+          progress: user.progress || []
+        }, serverMods);
+      } else {
+        initAppWithData({
+          nama: user.nama,
+          email: user.email,
+          kursus: user.kursus,
+          expDate: user.expDate,
+          progress: []
+        }, DEMO_MODS);
+      }
+    } else {
+      document.getElementById('lerr').style.display = 'block';
+      if (result && result.reason === 'expired') {
+        document.getElementById('lerr').textContent = 'Akses sudah kadaluarsa. Hubungi admin.';
+      }
+    }
+  } catch (err) {
+    console.error('Login error:', err);
+    showToast('Gagal koneksi ke server: ' + err.message);
+  }
+}
+
+function initAppWithData(user, mods) {
+  currentUser = user;
+  currentMods = mods;
+  
+  // Inisialisasi progress
+  if (user.progress && user.progress.length > 0) {
+    progress = user.progress;
+  } else {
+    progress = new Array(mods.length).fill(false);
+    progress[0] = true;
+  }
+  
+  // Set locked status
+  currentMods.forEach((mod, idx) => {
+    if (idx > 0 && !progress[idx-1]) {
+      mod.locked = true;
+    } else {
+      mod.locked = false;
+    }
+  });
+  
+  // Load quiz state dari localStorage
+  QS = {};
+  const savedQS = localStorage.getItem('quiz_state_' + user.email);
+  if (savedQS) {
+    try { Object.assign(QS, JSON.parse(savedQS)); } catch(e) {}
+  }
+  
+  document.getElementById('lw').style.display = 'none';
+  document.getElementById('appEl').classList.add('on');
+  
+  const ini = user.nama.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  document.getElementById('uAv').textContent = ini;
+  document.getElementById('uName').textContent = user.nama;
+  document.getElementById('uCourse').textContent = user.kursus;
+  document.getElementById('expDate').textContent = 's.d. ' + user.expDate;
+  
+  updateProg();
+  renderSb();
+  loadMod(0);
+  startStudentChat();
+}
+
+function doLogout() {
+  if (chatTimer) clearInterval(chatTimer);
+  chatTimer = null;
+  chatThreadId = '';
+  chatMessages = [];
+  document.getElementById('chatFab').classList.remove('on');
+  document.getElementById('chatPanel').classList.remove('on');
+  document.getElementById('appEl').classList.remove('on');
+  document.getElementById('lw').style.display = 'flex';
+  document.getElementById('ltoken').value = '';
+  currentUser = null;
+  currentMods = [];
+  progress = [];
+  QS = {};
+}
+
+// ================================================================
+// RENDER FUNCTIONS (menggunakan currentMods)
+// ================================================================
+function updateProg() {
+  const d = progress.filter(Boolean).length;
+  const t = progress.length;
+  document.getElementById('progTxt').textContent = d + '/' + t + ' modul';
+  document.getElementById('progBar').style.width = Math.round(d / t * 100) + '%';
+}
+
+function renderSb() {
+  let sec = '', html = '';
+  const mods = currentMods;
+  
+  mods.forEach((m, i) => {
+    if (m.sec !== sec) {
+      sec = m.sec;
+      html += `<div class="m-sec-lbl">${m.sec}</div>`;
+    }
+    const done = progress[i] && !m.locked;
+    const qp = QS[i] && QS[i].passed;
+    const active = i === curMod;
+    const ic = m.locked ? '🔒' : done ? (qp ? '★' : '✓') : (i + 1);
+    
+    html += `<div class="m-item${active ? ' active' : ''}${done ? ' done' : ''}${m.locked ? ' locked' : ''}" onclick="loadMod(${i})">
+      <div class="m-ic">${ic}</div>
+      <div class="m-txt">
+        <div class="m-title">${m.title}</div>
+        <div class="m-dur">${m.dur}${m.quiz && m.quiz.length ? ' · ' + m.quiz.length + ' soal' : ''}</div>
+      </div>
+    </div>`;
+  });
+  
+  document.getElementById('mList').innerHTML = html;
+}
+
+function loadMod(i) {
+  const mods = currentMods;
+  if (mods[i].locked) {
+    showToast('🔒 Selesaikan modul sebelumnya dulu');
+    return;
+  }
+  curMod = i;
+  curTab = 'video';
+  document.getElementById('tbTitle').textContent = 'Modul ' + mods[i].id + ': ' + mods[i].title;
+  renderSb();
+  renderContent();
+  document.getElementById('ca').scrollTop = 0;
+  if (window.innerWidth < 769) document.getElementById('sbEl').classList.remove('open');
+}
+
+function renderContent() {
+  const mods = currentMods;
+  const m = mods[curMod];
+  const done = progress[curMod];
+  const qs = QS[curMod] || {};
+  const qUnlock = done;
+  const qPassed = qs.passed;
+  const qBadge = qPassed ? '<span class="badge ok">✓ Lulus</span>' : (qs.attempts ? '<span class="badge">Belum lulus</span>' : '');
+  const doneBadge = done ? `<div class="done-badge">✓ <span>Materi selesai${qPassed ? ' · Kuis lulus' : ' — ambil kuis untuk lanjut'}</span></div>` : '';
+  const qStyle = !qUnlock ? 'opacity:.45;cursor:not-allowed' : '';
+  
+  document.getElementById('ca').innerHTML = `
+    <div style="margin-bottom:20px">
+      <div class="mod-num">Modul ${m.id} dari ${mods.length}</div>
+      <div class="mod-title">${m.title}</div>
+      <div class="mod-meta"><span>⏱ ${m.dur}</span><span>📁 ${m.sec}</span>${m.quiz && m.quiz.length ? `<span>🎯 ${m.quiz.length} soal kuis</span>` : ''}</div>
+    </div>
+    ${doneBadge}
+    <div class="ctabs">
+      <button class="ctab${curTab === 'video' ? ' active' : ''}" onclick="switchTab('video')">▶ Video</button>
+      <button class="ctab${curTab === 'pdf' ? ' active' : ''}" onclick="switchTab('pdf')">📄 PDF</button>
+      <button class="ctab${curTab === 'teks' ? ' active' : ''}" onclick="switchTab('teks')">📝 Teks</button>
+      ${m.quiz && m.quiz.length ? `<button class="ctab qa${curTab === 'quiz' ? ' active' : ''}" style="${qStyle}" onclick="${qUnlock ? "switchTab('quiz')" : "showToast('Tandai materi selesai dulu')"}">🎯 Kuis ${qBadge}</button>` : ''}
+    </div>
+    <div id="tabBody"></div>
+    <div class="cnav">
+      <button class="btn-prev" onclick="prevMod()" ${curMod === 0 ? 'disabled' : ''}>← Sebelumnya</button>
+      ${!done ? `<button class="btn-mark" onclick="markDone()">Tandai Selesai →</button>` : `<button class="btn-mark" onclick="nextMod()" ${curMod === mods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>`}
+    </div>
+  `;
+  renderTab();
+}
+
+function renderTab() {
+  const mods = currentMods;
+  const m = mods[curMod];
+  const body = document.getElementById('tabBody');
+  
+  if (curTab === 'video') {
+    const vEl = m.video.url ? `<iframe src="${m.video.url}" allowfullscreen></iframe>` : `<div class="vid-ph"><div class="play-c">▶</div><div style="font-size:14px;opacity:.85">${m.video.cap || 'Video tersedia di sistem penuh'}</div></div>`;
+    body.innerHTML = `<div class="vid-wrap">${vEl}</div><div class="vid-note">📌 Link video dikelola admin via Google Sheets.</div>`;
+  } else if (curTab === 'pdf') {
+    body.innerHTML = m.pdf.nama ? `<div class="pdf-card"><div class="pdf-ic">PDF</div><div class="pdf-info"><div class="pdf-name">${m.pdf.nama}</div><div class="pdf-meta">${m.pdf.size} · ${m.pdf.hal} hal.</div></div><a href="${m.pdf.url || '#'}" class="btn-dl" target="_blank">Download</a></div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada PDF.</div>`;
+  } else if (curTab === 'teks') {
+    body.innerHTML = m.teks ? `<div class="teks">${m.teks}</div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Konten teks belum tersedia.</div>`;
+  } else if (curTab === 'quiz') {
+    renderQuiz();
+  }
+}
+
+function switchTab(t) { curTab = t; renderContent(); }
+
+// ================================================================
+// QUIZ ENGINE
+// ================================================================
+function renderQuiz() {
+  const mods = currentMods;
+  const m = mods[curMod];
+  const qs = QS[curMod] || {};
+  const body = document.getElementById('tabBody');
+  
+  if (!m.quiz || !m.quiz.length) {
+    body.innerHTML = `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada kuis.</div>`;
+    return;
+  }
+  if (qs.showResult) {
+    renderResult(body, m, qs);
+    return;
+  }
+  
+  const qi = qs.current || 0;
+  const q = m.quiz[qi];
+  const pct = Math.round(qi / m.quiz.length * 100);
+  const L = ['A', 'B', 'C', 'D'];
+  
+  body.innerHTML = `
+    <div class="qwrap">
+      <div class="qhdr"><div class="qtitle">Kuis: ${m.title}</div><div class="qsub">${m.quiz.length} soal · Minimal 70% untuk lulus</div></div>
+      <div class="qctr"><span>Soal ${qi + 1} / ${m.quiz.length}</span><span>Benar: <strong id="qsc">${qs.correct || 0}</strong></span></div>
+      <div class="qprog-bg"><div class="qprog-fill" style="width:${pct}%"></div></div>
+      <div style="margin-bottom:14px"></div>
+      <div class="qcard">
+        <div class="qnum">Soal ${qi + 1}</div>
+        <div class="qtext">${q.q}</div>
+        <div class="qopts" id="qOpts">${q.opts.map((o, i) => `<button class="qopt" id="qo${i}" onclick="ansQ(${i})"><span class="qltr">${L[i]}</span>${o}</button>`).join('')}</div>
+        <div class="qfb" id="qfb"></div>
+      </div>
+      <div class="qnav">
+        <span style="font-size:12px;color:var(--txl)">Percobaan ke-${(qs.attempts || 0) + 1}</span>
+        <button class="btn-qnext" id="btnNext" onclick="nextQ()" disabled>Lanjut →</button>
+      </div>
+    </div>`;
+}
+
+function ansQ(idx) {
+  const mods = currentMods;
+  const m = mods[curMod];
+  const qs = QS[curMod] || { current: 0, correct: 0, answers: [] };
+  const qi = qs.current || 0;
+  const q = m.quiz[qi];
+  const ok = idx === q.ans;
+  
+  document.querySelectorAll('.qopt').forEach(b => b.disabled = true);
+  document.getElementById('qo' + idx).classList.add(ok ? 'correct' : 'wrong');
+  document.getElementById('qo' + idx).querySelector('.qltr').textContent = ok ? '✓' : '✗';
+  
+  if (!ok) {
+    document.getElementById('qo' + q.ans).classList.add('missed');
+    document.getElementById('qo' + q.ans).querySelector('.qltr').textContent = '✓';
+  }
+  
+  const fb = document.getElementById('qfb');
+  fb.className = 'qfb show ' + (ok ? 'ok' : 'err');
+  fb.innerHTML = (ok ? '✓ Benar! ' : '✗ Kurang tepat. ') + q.exp;
+  
+  const nc = (qs.correct || 0) + (ok ? 1 : 0);
+  QS[curMod] = { ...qs, correct: nc, answers: [...(qs.answers || []), { qi, idx, ok }] };
+  document.getElementById('qsc').textContent = nc;
+  
+  const btnNext = document.getElementById('btnNext');
+  btnNext.disabled = false;
+  btnNext.textContent = qi === m.quiz.length - 1 ? 'Lihat Hasil →' : 'Lanjut →';
+}
+
+async function nextQ() {
+  const mods = currentMods;
+  const m = mods[curMod];
+  const qs = QS[curMod] || {};
+  const qi = (qs.current || 0) + 1;
+  
+  if (qi >= m.quiz.length) {
+    const pct = Math.round((qs.correct || 0) / m.quiz.length * 100);
+    const passed = pct >= 70;
+    
+    QS[curMod] = {
+      ...qs,
+      showResult: true,
+      pct: pct,
+      passed: passed,
+      attempts: (qs.attempts || 0) + 1
+    };
+    
+    if (passed) {
+      progress[curMod] = true;
+      if (curMod + 1 < currentMods.length) {
+        currentMods[curMod + 1].locked = false;
+      }
+      updateProg();
+      
+      // Simpan progress ke server
+      if (currentUser && currentUser.email) {
+        try {
+          await apiPost({
+            action: 'updateProgress',
+            email: currentUser.email,
+            moduleId: curMod + 1,
+            actionType: 'complete',
+            quizScore: pct
+          });
+        } catch(e) { console.error('Save progress error:', e); }
+      }
+    }
+    
+    // Simpan ke localStorage
+    if (currentUser) {
+      localStorage.setItem('quiz_state_' + currentUser.email, JSON.stringify(QS));
+      localStorage.setItem('progress_' + currentUser.email, JSON.stringify(progress));
+    }
+    
+    renderContent();
+  } else {
+    QS[curMod] = { ...qs, current: qi };
+    renderContent();
+  }
+}
+
+function renderResult(body, m, qs) {
+  const pass = qs.passed;
+  body.innerHTML = `
+    <div class="qwrap"><div class="qresult">
+      <div class="sring ${pass ? 'pass' : 'fail'}"><div class="spct">${qs.pct}%</div><div class="slbl">skor</div></div>
+      <div class="rtitle">${pass ? 'Selamat, Kamu Lulus! 🎉' : 'Belum Lulus — Coba Lagi'}</div>
+      <div class="rsub">${pass ? 'Kamu lulus kuis modul ini. Lanjutkan ke modul berikutnya!' : 'Perlu minimal 70%. Pelajari ulang materinya dan coba lagi.'}</div>
+      <div class="sdetail">
+        <div class="sitem c"><strong>${qs.correct}</strong><span>Benar</span></div>
+        <div class="sitem w"><strong>${m.quiz.length - qs.correct}</strong><span>Salah</span></div>
+        <div class="sitem"><strong>${m.quiz.length}</strong><span>Total</span></div>
+      </div>
+      <div>
+        <button class="btn-retry" onclick="retryQuiz()">↺ Ulangi Kuis</button>
+        <button class="btn-nxtm" onclick="nextMod()" ${!pass || curMod === currentMods.length - 1 ? 'disabled' : ''}>Modul Berikutnya →</button>
+      </div>
+    </div></div>`;
+}
+
+function retryQuiz() {
+  QS[curMod] = { attempts: (QS[curMod] || {}).attempts || 0, correct: 0, current: 0, answers: [], showResult: false };
+  renderContent();
+}
+
+async function markDone() {
+  progress[curMod] = true;
+  if (curMod + 1 < currentMods.length) {
+    currentMods[curMod + 1].locked = false;
+  }
+  updateProg();
+  showToast('Materi selesai! Ambil kuis untuk lanjut ke modul berikutnya 🎯');
+  renderContent();
+  renderSb();
+  
+  if (currentUser && currentUser.email) {
+    try {
+      await apiPost({
+        action: 'updateProgress',
+        email: currentUser.email,
+        moduleId: curMod + 1,
+        actionType: 'complete'
+      });
+      localStorage.setItem('progress_' + currentUser.email, JSON.stringify(progress));
+    } catch(e) { console.error('Save error:', e); }
+  }
+}
+
+function nextMod() { if (curMod < currentMods.length - 1) loadMod(curMod + 1); }
+function prevMod() { if (curMod > 0) loadMod(curMod - 1); }
+function toggleSb() { document.getElementById('sbEl').classList.toggle('open'); }
+
+// ================================================================
+// CHAT ADMIN
+// ================================================================
+function startStudentChat() {
+  document.getElementById('chatFab').classList.add('on');
+  loadStudentChat();
+  if (chatTimer) clearInterval(chatTimer);
+  chatTimer = setInterval(loadStudentChat, 8000);
+}
+
+function toggleChat(force) {
+  const panel = document.getElementById('chatPanel');
+  const open = typeof force === 'boolean' ? force : !panel.classList.contains('on');
+  panel.classList.toggle('on', open);
+  if (open) {
+    markStudentChatRead();
+    setTimeout(() => {
+      const body = document.getElementById('chatBody');
+      body.scrollTop = body.scrollHeight;
+    }, 50);
+  }
+}
+
+async function loadStudentChat() {
+  if (!currentUser || !currentUser.email) return;
+  try {
+    const data = await apiFetch({ action:'getChatMessages', email:currentUser.email });
+    chatThreadId = data.thread ? data.thread.id : chatThreadId;
+    chatMessages = data.messages || [];
+    renderStudentChat(data.thread);
+  } catch (err) {
+    console.error('load chat error:', err);
+  }
+}
+
+function renderStudentChat(thread) {
+  const body = document.getElementById('chatBody');
+  const badge = document.getElementById('chatBadge');
+  const unread = thread ? Number(thread.unreadSiswa || 0) : 0;
+  badge.textContent = unread;
+  badge.classList.toggle('on', unread > 0);
+
+  if (!chatMessages.length) {
+    body.innerHTML = '<div class="chat-empty">Belum ada pesan. Kirim pertanyaan ke admin kapan saja.</div>';
+    return;
+  }
+
+  body.innerHTML = chatMessages.map(m => `
+    <div class="chat-msg ${m.sender === 'admin' ? 'admin' : 'siswa'}">
+      <div>${escChat(m.message)}</div>
+      <div class="chat-meta">${m.sender === 'admin' ? 'Admin' : 'Saya'} · ${shortTime(m.timestamp)}</div>
+    </div>
+  `).join('');
+  if (document.getElementById('chatPanel').classList.contains('on')) {
+    body.scrollTop = body.scrollHeight;
+  }
+}
+
+async function sendStudentMessage(ev) {
+  ev.preventDefault();
+  if (!currentUser) return;
+  const input = document.getElementById('chatInput');
+  const btn = document.getElementById('chatSend');
+  const msg = input.value.trim();
+  if (!msg) return;
+  btn.disabled = true;
+  try {
+    const res = await apiPost({
+      action:'sendChatMessage',
+      threadId:chatThreadId,
+      sender:'siswa',
+      senderName:currentUser.nama,
+      email:currentUser.email,
+      nama:currentUser.nama,
+      kursusId:currentUser.kursusId || '',
+      kursus:currentUser.kursus || '',
+      message:msg
+    });
+    if (res && res.success) {
+      chatThreadId = res.threadId;
+      input.value = '';
+      await loadStudentChat();
+    } else {
+      throw new Error(res && res.error ? res.error : 'Gagal mengirim pesan');
+    }
+  } catch (err) {
+    showToast('Gagal mengirim chat: ' + err.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function markStudentChatRead() {
+  if (!chatThreadId) return;
+  try {
+    await apiPost({ action:'markChatRead', threadId:chatThreadId, reader:'siswa' });
+    const badge = document.getElementById('chatBadge');
+    badge.textContent = '0';
+    badge.classList.remove('on');
+  } catch (err) {
+    console.error('mark chat read error:', err);
+  }
+}
+
+function escChat(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function shortTime(value) {
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value || '';
+  return d.toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+}
+
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 3200); }
+</script>
+</body>
+</html>
