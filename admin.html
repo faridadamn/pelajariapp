@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — AkademiPro</title>
+<title>Admin - Pelajari</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--brand:#1a6b4a;--brand2:#2d9668;--bl:#e8f5ee;--bm:#9fe1cb;--acc:#f0a500;--tx:#121c17;--txm:#4a6055;--txl:#8fa89d;--bg:#f5f9f7;--wh:#fff;--br:#d8e8e1;--dan:#e05252;--danl:#ffeaea;--warn:#f0a500;--warnl:#fff8e6;--r:14px;--rs:8px;--sh:0 2px 16px rgba(26,107,74,.08);--fh:'Sora',sans-serif;--fb:'DM Sans',sans-serif}
@@ -35,6 +35,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
 .main{flex:1;overflow:auto}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--wh);border-bottom:1px solid var(--br);position:sticky;top:0;z-index:10}
 .topbar-left{display:flex;align-items:center;gap:12px}
+.menu-btn{display:none;background:var(--wh);border:1px solid var(--br);border-radius:9px;width:38px;height:36px;align-items:center;justify-content:center;font-size:18px;color:var(--tx);cursor:pointer}
 .tb-title{font-family:var(--fh);font-size:15px;font-weight:600}
 .sync-status{font-size:11px;color:var(--txl);padding:3px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--br)}
 .sync-status.loading{color:var(--warn);border-color:var(--warn);background:var(--warnl)}
@@ -189,6 +190,44 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
 .btn-close-chat{background:#fff;color:var(--txm);border:1px solid var(--br);border-radius:999px;padding:7px 12px;font:600 12px var(--fb);cursor:pointer}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--tx);color:#fff;padding:12px 20px;border-radius:var(--rs);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999;max-width:360px}
 .toast.on{opacity:1}
+.scrim{display:none;position:fixed;inset:0;background:rgba(18,28,23,.36);z-index:80}
+.scrim.on{display:block}
+@media(max-width:900px){
+  .app.on{display:block;height:auto;min-height:100vh;overflow:visible}
+  .menu-btn{display:flex}
+  .sb{position:fixed;inset:0 auto 0 0;width:260px;z-index:90;transform:translateX(-105%);transition:transform .22s ease;box-shadow:18px 0 45px rgba(18,28,23,.14)}
+  .sb.open{transform:translateX(0)}
+  .main{min-height:100vh;overflow:visible}
+  .topbar{padding:12px 16px;gap:10px}
+  .topbar-left{min-width:0;gap:9px}
+  .tb-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sync-status{display:none}
+  .topbar-right{gap:8px}
+  .topbar-right .btn-act{padding:7px 10px!important;font-size:11px!important}
+  .lo-btn{padding:7px 11px}
+  .page{padding:16px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .filters{width:100%}
+  .filters input,.filters select,.filters .btn-act{width:100%}
+  .tbl{overflow-x:auto}
+  .th,.tr{min-width:760px}
+  .k-grid{grid-template-columns:1fr}
+  .fg-row2,.qe-opts{grid-template-columns:1fr}
+  .form-actions,.m-actions{flex-direction:column;align-items:stretch}
+  .chat-layout{grid-template-columns:1fr;height:auto;min-height:calc(100vh - 146px)}
+  .chat-list{border-right:0;border-bottom:1px solid var(--br);max-height:260px}
+  .chat-messages{min-height:300px;max-height:52vh}
+  .chat-msg{max-width:88%}
+}
+@media(max-width:560px){
+  .lb{padding:28px 22px}
+  .stat-grid{grid-template-columns:1fr}
+  .sec-head{align-items:stretch}
+  .sec-head .btn-act,.sec-head select{width:100%}
+  .modal{padding:20px;max-height:92vh}
+  .drow{display:block}
+  .dval{display:block;text-align:left;max-width:none;margin-top:4px}
+}
 </style>
 </head>
 <body>
@@ -196,7 +235,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
 <!-- LOGIN -->
 <div class="lw" id="lw">
   <div class="lb">
-    <div class="lb-logo">Akademi<span>Pro</span></div>
+    <div class="lb-logo">Pelajari</div>
     <div class="lb-sub">Panel Admin</div>
     <h2>Masuk ke Dashboard</h2>
     <input type="text" id="lu" placeholder="Username" autocomplete="username">
@@ -208,8 +247,9 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
 
 <!-- APP -->
 <div class="app" id="appEl">
-  <div class="sb">
-    <div class="sb-logo">Akademi<span>Pro</span><small>Admin Panel</small></div>
+  <div class="scrim" id="navScrim" onclick="toggleMobileNav(false)"></div>
+  <div class="sb" id="adminSidebar">
+    <div class="sb-logo">Pelajari<small>Admin Panel</small></div>
     <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="ic">📊</span>Dashboard</div>
     <div class="nav-item" onclick="showPage('pendaftar',this)"><span class="ic">👥</span>Pendaftar</div>
     <div class="nav-item" onclick="showPage('kursus',this)"><span class="ic">📚</span>Kelola Kursus</div>
@@ -221,6 +261,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.5}
   <div class="main">
     <div class="topbar">
       <div class="topbar-left">
+        <button class="menu-btn" onclick="toggleMobileNav(true)" aria-label="Buka menu">☰</button>
         <div class="tb-title" id="pageTitle">Dashboard</div>
         <div class="sync-status" id="syncStatus">Menghubungkan...</div>
       </div>
@@ -402,6 +443,7 @@ function doLogin() {
 function doLogout() {
   if (chatTimer) clearInterval(chatTimer);
   chatTimer = null;
+  toggleMobileNav(false);
   document.getElementById('appEl').classList.remove('on');
   document.getElementById('lw').style.display = 'flex';
   document.getElementById('lp').value = '';
@@ -1049,7 +1091,17 @@ function showPage(page, navEl) {
   if (navEl) navEl.classList.add('active');
   const titles = { dashboard:'Dashboard', pendaftar:'Kelola Pendaftar', kursus:'Kelola Kursus', materi:'Edit Materi', chat:'Chat Siswa' };
   document.getElementById('pageTitle').textContent = titles[page] || page;
+  toggleMobileNav(false);
   if (page === 'chat') loadChatThreads();
+}
+
+function toggleMobileNav(force) {
+  const sb = document.getElementById('adminSidebar');
+  const scrim = document.getElementById('navScrim');
+  if (!sb || !scrim) return;
+  const open = typeof force === 'boolean' ? force : !sb.classList.contains('open');
+  sb.classList.toggle('open', open);
+  scrim.classList.toggle('on', open);
 }
 
 /* ================================================================
