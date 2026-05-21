@@ -500,8 +500,9 @@ function renderTab() {
   const body = document.getElementById('tabBody');
   
   if (curTab === 'video') {
-    const vEl = m.video.url ? `<iframe src="${m.video.url}" allowfullscreen></iframe>` : `<div class="vid-ph"><div class="play-c">▶</div><div style="font-size:14px;opacity:.85">${m.video.cap || 'Video tersedia di sistem penuh'}</div></div>`;
-    body.innerHTML = `<div class="vid-wrap">${vEl}</div><div class="vid-note">📌 Link video dikelola admin via Google Sheets.</div>`;
+    const embedUrl = m.video.url ? buildProtectedEmbedUrl(m.video.url) : '';
+    const vEl = embedUrl ? `<iframe src="${embedUrl}" title="${escapeAttr(m.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` : `<div class="vid-ph"><div class="play-c">▶</div><div style="font-size:14px;opacity:.85">${m.video.cap || 'Video tersedia di sistem penuh'}</div></div>`;
+    body.innerHTML = `<div class="vid-wrap">${vEl}</div><div class="vid-note">📌 Video hanya tersedia di portal belajar untuk siswa terverifikasi.</div>`;
   } else if (curTab === 'pdf') {
     body.innerHTML = m.pdf.nama ? `<div class="pdf-card"><div class="pdf-ic">PDF</div><div class="pdf-info"><div class="pdf-name">${m.pdf.nama}</div><div class="pdf-meta">${m.pdf.size} · ${m.pdf.hal} hal.</div></div><a href="${m.pdf.url || '#'}" class="btn-dl" target="_blank">Download</a></div>` : `<div style="padding:32px;text-align:center;color:var(--txl);font-size:13px">Belum ada PDF.</div>`;
   } else if (curTab === 'teks') {
@@ -696,6 +697,27 @@ function startStudentChat() {
   loadStudentChat();
   if (chatTimer) clearInterval(chatTimer);
   chatTimer = setInterval(loadStudentChat, 8000);
+}
+
+function buildProtectedEmbedUrl(url) {
+  const raw = String(url || '').trim();
+  if (!raw) return '';
+  let id = '';
+  try {
+    const u = new URL(raw);
+    if (u.hostname.includes('youtu.be')) id = u.pathname.split('/').filter(Boolean)[0] || '';
+    else if (u.pathname.includes('/embed/')) id = u.pathname.split('/embed/')[1].split('/')[0];
+    else id = u.searchParams.get('v') || '';
+  } catch(e) {
+    const match = raw.match(/(?:embed\/|youtu\.be\/|v=)([A-Za-z0-9_-]{6,})/);
+    id = match ? match[1] : '';
+  }
+  if (!id) return raw;
+  return 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?rel=0&modestbranding=1&playsinline=1';
+}
+
+function escapeAttr(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function toggleChat(force) {
