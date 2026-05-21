@@ -3,561 +3,708 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AkademiPro — Daftar Kursus</title>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<title>Pelajari - Kursus Skill Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* =========================================================
-   KONFIGURASI BRAND — ganti nilai ini untuk tiap klien
-   ========================================================= */
 :root{
-  --brand:#1a6b4a; --brand2:#2d9668; --bl:#e8f5ee; --bm:#9fe1cb;
-  --acc:#f0a500;
-  --tx:#121c17; --txm:#4a6055; --txl:#8fa89d;
-  --bg:#f5f9f7; --wh:#fff; --br:#d8e8e1;
-  --r:14px; --rs:8px;
-  --sh:0 2px 16px rgba(26,107,74,.08);
-  --fh:'Sora',sans-serif; --fb:'DM Sans',sans-serif;
+  --green:#059447;
+  --green-2:#07b65b;
+  --green-3:#e9f8f0;
+  --mint:#f5fbf8;
+  --ink:#091411;
+  --muted:#5f6f6a;
+  --soft:#91a39c;
+  --line:#dde9e4;
+  --white:#fff;
+  --amber:#ffb545;
+  --orange:#ff8a3d;
+  --shadow:0 18px 55px rgba(10,45,30,.10);
+  --shadow-soft:0 8px 30px rgba(10,45,30,.07);
+  --radius:18px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6}
+body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:var(--ink);line-height:1.55}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.shell{max-width:1180px;margin:0 auto;padding:0 28px}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:var(--green-3);color:#087b41;font-weight:700;font-size:13px;padding:9px 14px}
+.mini-icon{width:21px;height:21px;border-radius:7px;background:#fff;color:var(--green);display:grid;place-items:center;font-weight:800}
+.btn{border:0;border-radius:9px;padding:13px 22px;font-weight:800;transition:.2s ease;background:var(--green);color:#fff;box-shadow:0 10px 18px rgba(5,148,71,.18)}
+.btn:hover{background:#047f3d;transform:translateY(-1px)}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{border-color:#b7cac2;background:#fbfdfc}
+.btn.full{width:100%}
+.section-head{text-align:center;margin-bottom:34px}
+.section-head h2{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.03em}
+.section-head p{margin-top:9px;color:var(--muted);font-size:15px}
 
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--br);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--brand)}
-.nav-brand span{color:var(--acc)}
-.nav-links{display:flex;align-items:center;gap:16px}
-.nav-links a{font-size:13px;color:var(--txm);text-decoration:none}
-.nav-links a:hover{color:var(--brand)}
-.nav-cta{background:var(--brand);color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb);transition:background .2s}
-.nav-cta:hover{background:var(--brand2)}
+/* Nav */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(221,233,228,.75)}
+.nav{height:74px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand-mark{width:25px;height:25px;border-radius:7px;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px}
+.navlinks{display:flex;align-items:center;gap:34px;font-size:13px;font-weight:700;color:#26332f}
+.navlinks a.active,.navlinks a:hover{color:var(--green)}
+.nav-actions{display:flex;gap:12px}
+.nav-actions .btn{padding:11px 20px;font-size:13px;border-radius:8px}
+.hamb{display:none}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,var(--brand) 0%,#0f4a33 100%);color:#fff;padding:80px 24px 64px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-80px;left:-40px;width:220px;height:220px;background:rgba(240,165,0,.07);border-radius:50%;pointer-events:none}
-.hero-badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:4px 16px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:20px}
-.hero h1{font-family:var(--fh);font-size:clamp(28px,5vw,48px);font-weight:700;margin-bottom:16px;line-height:1.2}
-.hero h1 span{color:var(--acc)}
-.hero p{font-size:16px;opacity:.85;max-width:520px;margin:0 auto 32px}
-.btn-hero{background:#fff;color:var(--brand);border:none;padding:14px 36px;border-radius:30px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--fh);transition:all .2s}
-.btn-hero:hover{background:var(--acc);color:#fff}
-.hero-stats{display:flex;justify-content:center;gap:40px;margin-top:36px;flex-wrap:wrap}
-.hero-stat{text-align:center}
-.hero-stat strong{display:block;font-family:var(--fh);font-size:26px;font-weight:700}
-.hero-stat span{font-size:12px;opacity:.75}
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:78px 0 46px;background:radial-gradient(circle at 82% 22%,rgba(5,148,71,.08),transparent 31%),linear-gradient(180deg,#fff 0%,#fbfdfc 100%)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(420px,.98fr);gap:56px;align-items:center}
+.hero-copy h1{font-size:52px;line-height:1.08;letter-spacing:-.055em;font-weight:800;margin-top:24px;max-width:610px}
+.hero-copy h1 span{color:var(--green)}
+.hero-copy p{color:#53645e;font-size:17px;margin-top:22px;max-width:520px}
+.hero-cta{display:flex;align-items:center;gap:14px;margin-top:30px;flex-wrap:wrap}
+.social-proof{display:flex;align-items:center;gap:16px;margin-top:26px;color:var(--muted);font-size:13px}
+.avatars{display:flex}
+.avatar{width:33px;height:33px;border-radius:999px;border:2px solid #fff;background:linear-gradient(135deg,#dceee7,#a8d7c1);margin-left:-8px;display:grid;place-items:center;color:#174c35;font-weight:800;font-size:11px}
+.avatar:first-child{margin-left:0}
+.stars{color:var(--amber);letter-spacing:1px;font-weight:800}
+.hero-art{position:relative;min-height:420px;display:grid;place-items:center}
+.hero-blob{position:absolute;inset:20px 0 0 46px;background:linear-gradient(135deg,rgba(5,148,71,.09),rgba(5,148,71,.03));border-radius:42% 58% 52% 48%;transform:rotate(-14deg)}
+.dash-card{position:relative;width:min(390px,100%);background:rgba(255,255,255,.84);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:24px;backdrop-filter:blur(20px)}
+.dash-title{font-weight:800;margin-bottom:18px}
+.dash-box{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px;margin-bottom:14px;box-shadow:var(--shadow-soft)}
+.progress-top{display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:10px}
+.bar{height:7px;border-radius:999px;background:#e8efec;overflow:hidden}
+.bar span{display:block;height:100%;width:76%;background:var(--green);border-radius:999px}
+.course-line{font-size:13px;font-weight:800;margin-top:12px}
+.course-line small{display:block;color:var(--muted);font-weight:500;margin-top:3px}
+.mentor-row{display:flex;align-items:center;gap:13px}
+.mentor-photo{width:50px;height:50px;border-radius:999px;background:linear-gradient(135deg,#d8ece4,#81c6a3);display:grid;place-items:center;font-weight:900;color:#165137}
+.mentor-name{font-weight:800;font-size:15px}
+.mentor-role{font-size:12px;color:var(--muted)}
+.certificate{display:flex;align-items:center;justify-content:space-between}
+.badge-medal{width:58px;height:58px;border-radius:999px;background:var(--green-3);display:grid;place-items:center;color:var(--green);font-size:27px}
+.stats{margin-top:34px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-soft);display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}
+.stat{padding:28px 26px;display:flex;align-items:center;gap:18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat-ic{font-size:34px;color:var(--green)}
+.stat strong{display:block;font-size:25px;font-weight:800;letter-spacing:-.03em}
+.stat span{font-size:13px;color:var(--muted)}
 
-/* BENEFITS */
-.benefits{background:var(--wh);border-bottom:1px solid var(--br)}
-.benefits-inner{max-width:960px;margin:0 auto;padding:32px 24px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap}
-.benefit-item{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:var(--txm)}
-.benefit-ic{width:32px;height:32px;background:var(--bl);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+/* Courses */
+.courses{padding:64px 0 40px;background:#fff}
+.tabs{display:flex;justify-content:center;gap:9px;margin:0 auto 34px;background:#f6f8f7;border:1px solid #edf2ef;width:max-content;padding:7px;border-radius:10px;max-width:100%;flex-wrap:wrap}
+.tab{border:0;background:transparent;padding:10px 18px;border-radius:8px;font-weight:800;font-size:13px;color:#26332f}
+.tab.active{background:#fff;color:var(--green);box-shadow:0 6px 18px rgba(0,0,0,.05)}
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.course-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-soft);overflow:hidden;transition:.2s ease}
+.course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.course-media{height:205px;position:relative;overflow:hidden;background:#003d2b}
+.course-media.design{background:radial-gradient(circle at 78% 28%,#4df0a0,transparent 18%),linear-gradient(135deg,#06422e,#078d4d)}
+.course-media.marketing{background:radial-gradient(circle at 70% 35%,#95ffc2,transparent 14%),linear-gradient(135deg,#093d2c,#0c9b55)}
+.course-media.data{background:radial-gradient(circle at 80% 42%,#2ce08d,transparent 12%),linear-gradient(135deg,#032f27,#005a45)}
+.course-media.self{background:radial-gradient(circle at 82% 35%,#ffd990,transparent 13%),linear-gradient(135deg,#204333,#0b8f51)}
+.level{position:absolute;top:16px;left:16px;border-radius:8px;background:#bff5d1;color:#064e2a;font-size:12px;font-weight:900;padding:7px 10px}
+.level.mid{background:#ffd284;color:#6b3b00}
+.mock-device{position:absolute;right:25px;top:34px;width:128px;height:138px;border-radius:18px;background:linear-gradient(155deg,rgba(255,255,255,.34),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.22);box-shadow:0 22px 40px rgba(0,0,0,.18);transform:rotate(-8deg)}
+.mock-device::before,.mock-device::after{content:"";position:absolute;left:18px;right:18px;height:10px;border-radius:999px;background:rgba(255,255,255,.45)}
+.mock-device::before{top:36px}.mock-device::after{top:62px;width:62px;right:auto}
+.media-label{position:absolute;left:34px;bottom:38px;color:#fff;font-size:30px;font-weight:800;letter-spacing:-.05em}
+.megaphone{position:absolute;right:32px;top:61px;width:112px;height:72px;border-radius:70px 18px 18px 70px;background:rgba(255,255,255,.35);transform:rotate(-18deg)}
+.megaphone::after{content:"";position:absolute;left:-33px;top:16px;border-top:20px solid transparent;border-bottom:20px solid transparent;border-right:42px solid rgba(255,255,255,.45)}
+.chart{position:absolute;right:26px;top:44px;width:150px;height:116px;border:1px solid rgba(255,255,255,.22);border-radius:13px;background:rgba(255,255,255,.11);display:flex;align-items:end;gap:10px;padding:18px}
+.chart span{display:block;width:19px;border-radius:6px 6px 0 0;background:#5cf1a6}
+.chart span:nth-child(1){height:35px}.chart span:nth-child(2){height:65px}.chart span:nth-child(3){height:50px}.chart span:nth-child(4){height:85px}
+.course-body{padding:19px}
+.course-body h3{font-size:19px;line-height:1.25;letter-spacing:-.025em;margin-bottom:10px}
+.course-body p{font-size:13px;color:var(--muted);min-height:44px}
+.course-meta{display:flex;gap:18px;margin:17px 0;color:#4f625b;font-size:12px;font-weight:700}
+.course-bottom{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.rating{font-size:13px;color:#4f625b}.rating b{color:var(--amber)}
+.price{font-size:20px;font-weight:800;letter-spacing:-.035em}
+.view-all{display:flex;justify-content:center;margin-top:38px}
+.view-all .btn{min-width:300px}
 
-/* SECTION */
-.section{max-width:960px;margin:0 auto;padding:48px 24px}
-.sec-label{font-family:var(--fh);font-size:11px;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
-.sec-title{font-family:var(--fh);font-size:28px;font-weight:700;margin-bottom:8px}
-.sec-sub{font-size:15px;color:var(--txm);margin-bottom:32px;max-width:540px}
+/* Signup */
+.signup{padding:68px 0 32px;background:linear-gradient(180deg,#fff 0%,#fbfdfc 100%)}
+.signup-layout{display:grid;grid-template-columns:1.05fr .62fr;gap:24px;align-items:start}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-bottom:24px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.step{padding:18px 17px;display:flex;gap:12px;min-height:92px;border-right:1px solid var(--line);background:#fff}
+.step:last-child{border-right:0}
+.step.active{box-shadow:inset 0 -3px 0 var(--green);background:#fbfffd}
+.step.done{background:#f8fffb}
+.step-num{width:28px;height:28px;border-radius:999px;background:#ccefe0;color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;flex:0 0 auto}
+.step.active .step-num,.step.done .step-num{background:var(--green)}
+.step b{display:block;font-size:13px;margin-bottom:4px}
+.step span{font-size:11px;color:var(--muted);display:block;line-height:1.35}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-soft);padding:24px}
+.panel h3{font-size:20px;letter-spacing:-.025em;margin-bottom:6px}
+.panel>p{font-size:13px;color:var(--muted);margin-bottom:21px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:15px}
+.field.full{grid-column:1/-1}
+.field label{display:block;font-size:12px;font-weight:800;margin-bottom:7px;color:#1f2f29}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:12px 13px;background:#fff;color:var(--ink);outline:none;font-size:13px;transition:.16s}
+.field textarea{height:84px;resize:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(5,148,71,.08)}
+.side-card{position:sticky;top:94px}
+.summary-media{height:74px;border-radius:12px;background:linear-gradient(135deg,#06422e,#078d4d);margin-bottom:15px;position:relative;overflow:hidden}
+.summary-media::after{content:"";position:absolute;right:16px;top:14px;width:86px;height:68px;border-radius:13px;background:rgba(255,255,255,.22);transform:rotate(-9deg)}
+.summary-row{display:flex;justify-content:space-between;gap:18px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.summary-row:last-child{border-bottom:0}
+.summary-row span{color:var(--muted)}
+.summary-row strong{font-weight:800;text-align:right}
+.access-note{margin-top:16px;background:var(--mint);border:1px solid #d8f1e4;border-radius:12px;padding:15px;color:#145437;font-size:13px;font-weight:700}
+.form-actions{display:flex;justify-content:space-between;gap:12px;margin-top:8px}
 
-/* COURSE GRID */
-.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
-.course-card{background:var(--wh);border:1.5px solid var(--br);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .22s;position:relative}
-.course-card:hover{border-color:var(--brand2);transform:translateY(-3px);box-shadow:var(--sh)}
-.course-card.selected{border-color:var(--brand);border-width:2px}
-.course-card.selected::after{content:'✓ Dipilih';position:absolute;top:12px;right:12px;background:var(--brand);color:#fff;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-.course-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:48px}
-.thumb-t1{background:linear-gradient(135deg,#e8f5ee,#c8eada)}
-.thumb-t2{background:linear-gradient(135deg,#fef3e2,#fde8b0)}
-.thumb-t3{background:linear-gradient(135deg,#e8f0fe,#c5d5f8)}
-.thumb-t4{background:linear-gradient(135deg,#fce8f0,#f5c0d3)}
-.course-body{padding:16px}
-.course-cat{font-size:11px;font-weight:700;color:var(--brand2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.course-name{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:6px}
-.course-desc{font-size:12px;color:var(--txm);margin-bottom:12px}
-.course-tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.course-tag{font-size:11px;color:var(--txl);background:var(--bg);border-radius:6px;padding:2px 8px}
-.course-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--br)}
-.price-new{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--brand)}
-.price-old{font-size:12px;color:var(--txl);text-decoration:line-through}
-.btn-pilih{background:var(--brand);color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--fb);transition:background .2s}
-.btn-pilih:hover{background:var(--brand2)}
+/* Payment */
+.payment-layout{display:grid;grid-template-columns:1fr .62fr;gap:24px}
+.pay-total{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:20px}
+.pay-total span{font-size:13px;font-weight:800}.pay-total strong{display:block;color:var(--green);font-size:36px;letter-spacing:-.05em}
+.copy-mini{border:1px solid #bbebd0;background:#f0fff7;color:var(--green);padding:7px 11px;border-radius:8px;font-size:12px;font-weight:800}
+.bank-box{padding:18px 0;border-bottom:1px solid var(--line)}
+.bank-title{font-size:12px;font-weight:800;margin-bottom:14px}
+.bank-line{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.bank-logo{font-size:21px;font-weight:900;color:#164988}
+.bank-number{font-size:21px;font-weight:800;letter-spacing:.02em}
+.bank-owner{font-size:12px;color:var(--muted)}
+.unique{padding-top:18px}
+.unique b{display:block;font-size:24px}
+.upload-zone{margin-top:22px;border:1.5px dashed #cfded8;border-radius:12px;min-height:130px;display:grid;place-items:center;text-align:center;padding:22px;background:#fbfdfc;transition:.18s}
+.upload-zone:hover,.upload-zone.uploaded{border-color:var(--green);background:#f3fff8}
+.upload-zone input{display:none}
+.upload-icon{font-size:34px;margin-bottom:8px}
+.upload-title{font-weight:800;font-size:13px}
+.upload-sub{font-size:12px;color:var(--muted);margin-top:5px}
+.check-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow-soft);margin-bottom:18px}
+.check-card h4{font-size:15px;margin-bottom:14px}
+.check-list{display:grid;gap:13px}
+.check{display:flex;gap:10px;font-size:13px;color:#33443e}
+.check::before{content:"✓";width:21px;height:21px;border-radius:999px;background:#e4f8ed;color:var(--green);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.note-card{background:#fff8ed;border:1px solid #f1dfc3;border-radius:14px;padding:18px;color:#634819;font-size:13px}
+.note-card h4{margin-bottom:10px}
+.note-card ol{padding-left:18px}
+.note-card li{margin:5px 0}
 
-/* TESTIMONIALS */
-.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.testi-card{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:20px}
-.testi-stars{color:var(--acc);font-size:13px;margin-bottom:10px}
-.testi-text{font-size:13px;color:var(--txm);line-height:1.7;margin-bottom:14px}
-.testi-user{display:flex;align-items:center;gap:10px}
-.testi-av{width:32px;height:32px;border-radius:50%;background:var(--bl);color:var(--brand);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--fh)}
-.testi-name{font-size:13px;font-weight:600}
-.testi-role{font-size:11px;color:var(--txl)}
+/* Testimonials */
+.testimonials{padding:70px 0 50px;background:#fff}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.testi{border:1px solid var(--line);border-radius:16px;padding:27px 26px;background:linear-gradient(135deg,#f5fbf8,#fff);box-shadow:var(--shadow-soft)}
+.testi:nth-child(3){background:linear-gradient(135deg,#fff8ee,#fff)}
+.testi-photo{width:74px;height:74px;border-radius:999px;margin:0 auto 20px;background:linear-gradient(135deg,#d9ece4,#92c9ad);display:grid;place-items:center;font-size:24px;font-weight:900;color:#165137}
+.testi p{font-size:15px;color:#21332d;min-height:110px}
+.testi h4{margin-top:18px;font-size:16px}
+.testi small{color:var(--muted)}
+.tag-win{margin-top:16px;display:inline-flex;background:#c9f0d8;color:#117c43;border-radius:8px;padding:8px 11px;font-size:12px;font-weight:800}
+.tag-win.orange{background:#ffd8b8;color:#ad4f10}
+.cta-band{margin-top:58px;background:linear-gradient(135deg,#07984a,#04b557);border-radius:16px;padding:30px 34px;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#fff;box-shadow:0 22px 45px rgba(5,148,71,.18)}
+.cta-band h3{font-size:25px;letter-spacing:-.03em}
+.cta-band p{margin-top:6px;color:rgba(255,255,255,.84);font-size:14px}
+.cta-band .btn{background:#fff;color:var(--green);box-shadow:none}
 
-/* ===== SCREENS ===== */
-.screen{display:none}
-.screen.active{display:block}
+/* Success */
+.success{text-align:center;padding:38px 22px}
+.success-icon{width:82px;height:82px;border-radius:999px;background:var(--green-3);color:var(--green);display:grid;place-items:center;margin:0 auto 18px;font-size:38px}
+.success h3{font-size:27px;letter-spacing:-.03em}
+.success p{max-width:430px;margin:10px auto 22px;color:var(--muted)}
+.reg-box{display:inline-block;background:#f7faf8;border:1px solid var(--line);border-radius:12px;padding:14px 30px;margin-bottom:24px}
+.reg-box span{display:block;font-size:11px;font-weight:900;color:var(--soft);letter-spacing:.08em}
+.reg-box b{font-size:24px;color:var(--green)}
 
-/* FORM */
-.form-wrap{max-width:680px;margin:0 auto}
-.steps-bar{display:flex;align-items:center;margin-bottom:32px}
-.step-item{display:flex;align-items:center;gap:7px;flex:1}
-.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:var(--fh);background:var(--wh);color:var(--txl);flex-shrink:0;transition:all .25s}
-.step-item.active .step-circle{border-color:var(--brand);background:var(--brand);color:#fff}
-.step-item.done .step-circle{border-color:var(--brand2);background:var(--bl);color:var(--brand)}
-.step-name{font-size:12px;color:var(--txl);font-weight:500}
-.step-item.active .step-name{color:var(--brand);font-weight:600}
-.step-item.done .step-name{color:var(--brand2)}
-.step-line{flex:1;height:1px;background:var(--br);margin:0 4px}
-.form-card{background:var(--wh);border:1px solid var(--br);border-radius:var(--r);padding:32px;box-shadow:var(--sh)}
-.form-head{font-family:var(--fh);font-size:20px;font-weight:700;margin-bottom:6px}
-.form-sub{font-size:14px;color:var(--txm);margin-bottom:28px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:520px){.row2{grid-template-columns:1fr}}
-.fg{margin-bottom:18px}
-.fg label{display:block;font-size:12px;font-weight:600;color:var(--txm);margin-bottom:5px;letter-spacing:.2px}
-.fg label .req{color:#e05252}
-.fg input,.fg select,.fg textarea{width:100%;padding:11px 14px;border:1.5px solid var(--br);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--wh);color:var(--tx);outline:none;transition:border-color .2s}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--brand)}
-.fg textarea{height:80px;resize:none}
-.fg-hint{font-size:11px;color:var(--txl);margin-top:4px}
+footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--muted);font-size:13px}
+.toast{position:fixed;right:24px;bottom:24px;z-index:1000;background:#101b16;color:#fff;border-radius:10px;padding:13px 18px;font-size:13px;font-weight:700;opacity:0;transform:translateY(10px);pointer-events:none;transition:.18s}
+.toast.on{opacity:1;transform:translateY(0)}
 
-/* PAYMENT */
-.amt-box{background:linear-gradient(135deg,var(--brand),#0f4a33);border-radius:var(--r);padding:22px;text-align:center;color:#fff;margin-bottom:20px}
-.amt-label{font-size:13px;opacity:.8;margin-bottom:4px}
-.amt-number{font-family:var(--fh);font-size:36px;font-weight:700;margin-bottom:4px}
-.amt-unique{font-size:12px;opacity:.75}
-.amt-unique strong{color:var(--acc)}
-.bank-list{border:1.5px solid var(--br);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
-.bank-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--br)}
-.bank-row:last-child{border-bottom:none}
-.bank-logo{width:48px;height:24px;background:var(--bg);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--brand)}
-.bank-info{flex:1;margin-left:12px}
-.bank-name{font-size:12px;color:var(--txl)}
-.bank-rek{font-family:var(--fh);font-size:15px;font-weight:600;letter-spacing:2px}
-.bank-an{font-size:11px;color:var(--txl)}
-.copy-btn{font-size:11px;color:var(--brand);background:var(--bl);border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-weight:600;font-family:var(--fb)}
-.upload-zone{border:2px dashed var(--br);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:all .2s}
-.upload-zone:hover{border-color:var(--brand2);background:var(--bl)}
-.upload-zone.uploaded{border-color:var(--brand);background:var(--bl);border-style:solid}
-.upload-ic{width:48px;height:48px;background:var(--bl);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px}
-.upload-title{font-size:14px;font-weight:600;margin-bottom:4px}
-.upload-sub{font-size:12px;color:var(--txl)}
-
-/* BUTTONS */
-.btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
-.btn-back{background:transparent;border:1.5px solid var(--br);color:var(--txm);padding:11px 24px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb);transition:all .2s}
-.btn-back:hover{border-color:var(--tx);color:var(--tx)}
-.btn-next{background:var(--brand);color:#fff;border:none;padding:11px 32px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--fb);transition:background .2s}
-.btn-next:hover{background:var(--brand2)}
-.btn-next:disabled{background:var(--br);color:var(--txl);cursor:not-allowed}
-
-/* SUCCESS */
-.success-wrap{text-align:center;padding:44px 20px}
-.success-ic{width:80px;height:80px;background:var(--bl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:36px}
-.success-wrap h2{font-family:var(--fh);font-size:24px;font-weight:700;margin-bottom:10px}
-.success-wrap p{color:var(--txm);font-size:14px;max-width:360px;margin:0 auto 24px}
-.reg-box{display:inline-block;background:var(--bg);border:1.5px solid var(--br);border-radius:var(--rs);padding:12px 28px;margin-bottom:28px}
-.reg-box .lbl{font-size:11px;color:var(--txl);font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.reg-box .val{font-family:var(--fh);font-size:22px;font-weight:700;color:var(--brand)}
-.steps-info{background:var(--bg);border-radius:var(--r);padding:16px 20px;text-align:left;margin-bottom:24px;border:1px solid var(--br)}
-.step-info-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--br)}
-.step-info-row:last-child{border-bottom:none}
-.step-info-ic{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.step-info-txt strong{display:block;font-size:13px;font-weight:600;margin-bottom:2px}
-.step-info-txt span{font-size:12px;color:var(--txl)}
-
-/* FOOTER */
-footer{background:var(--tx);color:rgba(255,255,255,.6);text-align:center;padding:28px 24px;font-size:12px}
-footer strong{color:#fff}
-footer a{color:var(--bm);text-decoration:none}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--tx);color:#fff;padding:12px 20px;border-radius:var(--rs);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .3s;z-index:9999}
-.toast.on{opacity:1}
+@media(max-width:980px){
+  .navlinks{display:none}.hamb{display:block}
+  .hero-grid,.signup-layout,.payment-layout{grid-template-columns:1fr}
+  .hero-copy h1{font-size:42px}
+  .hero-art{min-height:360px}
+  .stats,.course-grid,.testi-grid{grid-template-columns:1fr 1fr}
+  .side-card{position:static}
+}
+@media(max-width:680px){
+  .shell{padding:0 18px}
+  .nav{height:66px}.nav-actions .ghost{display:none}
+  .hero{padding-top:44px}.hero-copy h1{font-size:36px}
+  .hero-cta .btn{width:100%}
+  .stats,.course-grid,.testi-grid,.form-grid{grid-template-columns:1fr}
+  .stat{border-right:0;border-bottom:1px solid var(--line)}.stat:last-child{border-bottom:0}
+  .steps{grid-template-columns:1fr}.step{border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}
+  .panel{padding:20px}.form-actions,.cta-band{flex-direction:column;align-items:stretch}
+  .section-head h2{font-size:29px}
+}
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="nav-brand" id="navBrand">Akademi<span>Pro</span></div>
-  <div class="nav-links">
-    <a href="#kursus">Kursus</a>
-    <a href="#testi">Testimoni</a>
-    <a href="admin.html">Admin</a>
-  </div>
-  <button class="nav-cta" onclick="scrollToKursus()">Daftar Sekarang</button>
-</nav>
-
-<!-- SCREEN: LANDING -->
-<div class="screen active" id="scrLanding">
-  <div class="hero">
-    <div class="hero-badge">🎓 Platform Kursus Online Terpercaya</div>
-    <h1>Belajar Skill <span>Terbaik</span><br>Bersama Para Ahli</h1>
-    <p>Tingkatkan kemampuanmu dengan kursus berkualitas, mentor berpengalaman, dan sertifikat yang diakui industri.</p>
-    <button class="btn-hero" onclick="scrollToKursus()">Lihat Semua Kursus →</button>
-    <div class="hero-stats">
-      <div class="hero-stat"><strong>2.400+</strong><span>Siswa Aktif</span></div>
-      <div class="hero-stat"><strong>98%</strong><span>Kepuasan</span></div>
-      <div class="hero-stat"><strong>15+</strong><span>Kursus</span></div>
-      <div class="hero-stat"><strong>4.9★</strong><span>Rating</span></div>
+<header class="topbar">
+  <div class="shell nav">
+    <a class="brand" href="#beranda"><span class="brand-mark">P</span><span id="navBrand">Pelajari</span></a>
+    <nav class="navlinks">
+      <a class="active" href="#beranda">Beranda</a>
+      <a href="#kursus">Kursus</a>
+      <a href="#fitur">Fitur</a>
+      <a href="#testimoni">Testimoni</a>
+      <a href="#daftar">Cara Daftar</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn ghost" onclick="location.href='belajar.html'">Masuk</button>
+      <button class="btn" onclick="scrollToKursus()">Daftar Sekarang</button>
     </div>
   </div>
+</header>
 
-  <div class="benefits">
-    <div class="benefits-inner">
-      <div class="benefit-item"><div class="benefit-ic">📹</div>Video HD + materi PDF</div>
-      <div class="benefit-item"><div class="benefit-ic">🎯</div>Kuis per modul</div>
-      <div class="benefit-item"><div class="benefit-ic">📜</div>Sertifikat kelulusan</div>
-      <div class="benefit-item"><div class="benefit-ic">♾️</div>Akses seumur hidup</div>
-      <div class="benefit-item"><div class="benefit-ic">💬</div>Komunitas alumni</div>
+<main>
+  <section class="hero" id="beranda">
+    <div class="shell">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="pill"><span class="mini-icon">✣</span>Platform Kursus Online Terpercaya</div>
+          <h1>Belajar Skill Digital <span>yang Bisa Langsung Dipakai Kerja</span></h1>
+          <p>Kursus terstruktur, mentor berpengalaman, kuis per modul, dan sertifikat kelulusan.</p>
+          <div class="hero-cta">
+            <button class="btn" onclick="scrollToKursus()">Mulai Belajar Sekarang</button>
+            <button class="btn ghost" onclick="document.getElementById('kursus').scrollIntoView({behavior:'smooth'})">Lihat Semua Kursus</button>
+          </div>
+          <div class="social-proof">
+            <div class="avatars"><div class="avatar">FA</div><div class="avatar">SN</div><div class="avatar">AS</div><div class="avatar">DL</div></div>
+            <span><span class="stars">★★★★★</span> Bergabung dengan 2.400+ siswa aktif</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-blob"></div>
+          <div class="dash-card">
+            <div class="dash-title">Dashboard Belajarmu</div>
+            <div class="dash-box">
+              <div class="progress-top"><span>Progress Belajar</span><span>76%</span></div>
+              <div class="bar"><span></span></div>
+              <div class="course-line">UI/UX Design Fundamental<small>Modul 6 dari 12</small></div>
+            </div>
+            <div class="dash-box mentor-row">
+              <div class="mentor-photo">FA</div>
+              <div><div class="mentor-name">Farid Adam</div><div class="mentor-role">UI/UX Designer</div><div class="rating"><b>★</b> 4.8 (120+ review)</div></div>
+            </div>
+            <div class="dash-box certificate">
+              <div><div class="mentor-name">Sertifikat</div><div class="mentor-role">Siap didownload setelah menyelesaikan kursus</div></div>
+              <div class="badge-medal">✹</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stats" id="fitur">
+        <div class="stat"><div class="stat-ic">♟</div><div><strong>2.400+</strong><span>Siswa Aktif</span></div></div>
+        <div class="stat"><div class="stat-ic">★</div><div><strong>4.9 / 5</strong><span>Rating Alumni</span></div></div>
+        <div class="stat"><div class="stat-ic">▥</div><div><strong>15+</strong><span>Kursus Tersedia</span></div></div>
+        <div class="stat"><div class="stat-ic">✺</div><div><strong>98%</strong><span>Kepuasan Siswa</span></div></div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section" id="kursus">
-    <div class="sec-label">Pilih Kursus</div>
-    <div class="sec-title">Kursus yang Tersedia</div>
-    <div class="sec-sub">Pilih kursus yang sesuai dengan tujuan karirmu.</div>
-    <div class="course-grid" id="courseGrid"></div>
-  </div>
+  <section class="courses" id="kursus">
+    <div class="shell">
+      <div class="section-head">
+        <h2>Kursus Populer</h2>
+        <p>Pilih kursus sesuai minat dan tingkat kemampuanmu</p>
+      </div>
+      <div class="tabs" id="courseTabs"></div>
+      <div class="course-grid" id="courseGrid"></div>
+      <div class="view-all"><button class="btn ghost" onclick="scrollToSignup()">Lihat Semua Kursus</button></div>
+    </div>
+  </section>
 
-  <div class="section" id="testi" style="background:var(--wh);max-width:100%;padding:48px 0">
-    <div style="max-width:960px;margin:0 auto;padding:0 24px">
-      <div class="sec-label">Testimoni</div>
-      <div class="sec-title">Kata Alumni Kami</div>
+  <section class="signup" id="daftar">
+    <div class="shell">
+      <div class="section-head">
+        <h2>Alur Pendaftaran</h2>
+        <p>Ikuti 4 langkah mudah untuk mulai belajar</p>
+      </div>
+
+      <div class="steps" id="stepsBar">
+        <div class="step done" id="si1"><div class="step-num" id="sc1">1</div><div><b>Pilih Kursus</b><span>Pilih kursus yang kamu minati</span></div></div>
+        <div class="step active" id="si2"><div class="step-num" id="sc2">2</div><div><b>Data Diri</b><span>Lengkapi data dirimu</span></div></div>
+        <div class="step" id="si3"><div class="step-num" id="sc3">3</div><div><b>Pembayaran</b><span>Lakukan pembayaran</span></div></div>
+        <div class="step" id="si4"><div class="step-num" id="sc4">4</div><div><b>Selesai</b><span>Akses kursus akan dikirim</span></div></div>
+      </div>
+
+      <div id="fStep2">
+        <div class="signup-layout">
+          <div class="panel">
+            <h3>Lengkapi Data Dirimu</h3>
+            <p>Pastikan data yang kamu isi benar.</p>
+            <div class="form-grid">
+              <div class="field full"><label>Nama Lengkap *</label><input type="text" id="fNama" placeholder="Contoh: Farid Adam"></div>
+              <div class="field"><label>Email *</label><input type="email" id="fEmail" placeholder="contoh@email.com"></div>
+              <div class="field"><label>No. WhatsApp *</label><input type="tel" id="fWA" placeholder="0812-3456-7890"></div>
+              <div class="field"><label>Kota</label><input type="text" id="fKota" placeholder="Jakarta"></div>
+              <div class="field"><label>Pekerjaan</label><select id="fPekerjaan"><option value="">Pilih Pekerjaan</option><option>Mahasiswa</option><option>Karyawan</option><option>Freelancer</option><option>Entrepreneur</option><option>Lainnya</option></select></div>
+              <div class="field full"><label>Kursus yang Dipilih *</label><select id="fKursus" onchange="syncSelectedFromSelect()"></select></div>
+              <div class="field"><label>Dari mana tahu Pelajari?</label><select id="fSumber"><option value="">Pilih sumber</option><option>Instagram</option><option>TikTok</option><option>Google</option><option>Teman</option><option>Lainnya</option></select></div>
+              <div class="field"><label>Catatan</label><input type="text" id="fCatatan" placeholder="Opsional"></div>
+              <div class="field full"><label>Tujuan Mengikuti Kursus</label><textarea id="fTujuan" placeholder="Ceritakan tujuanmu mengikuti kursus ini..."></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn ghost" onclick="scrollToKursus()">Kembali Pilih Kursus</button>
+              <button class="btn" onclick="goToPayment()">Lanjut ke Pembayaran</button>
+            </div>
+          </div>
+          <aside class="panel side-card">
+            <h3>Ringkasan Pendaftaran</h3>
+            <div class="summary-media"></div>
+            <div class="summary-row"><span>Kursus</span><strong id="sumCourse">UI/UX Design Fundamental</strong></div>
+            <div class="summary-row"><span>Materi</span><strong id="sumMods">12 Modul</strong></div>
+            <div class="summary-row"><span>Video</span><strong id="sumVideo">6 Jam Video</strong></div>
+            <div class="summary-row"><span>Akses</span><strong id="sumAccess">Seumur Hidup</strong></div>
+            <div class="summary-row"><span>Total</span><strong id="sumPrice">Rp299.000</strong></div>
+            <div class="access-note">Estimasi akses: setelah verifikasi pembayaran, maksimal 1x24 jam.</div>
+          </aside>
+        </div>
+      </div>
+
+      <div id="fStep3" style="display:none">
+        <div class="payment-layout">
+          <div class="panel">
+            <div class="pay-total">
+              <div><span>Total Transfer</span><strong id="payAmt">Rp299.000</strong></div>
+              <button class="copy-mini" onclick="copyTxt(document.getElementById('payAmt').textContent)">Salin Nominal</button>
+            </div>
+            <div id="bankList"></div>
+            <div class="unique"><span class="bank-title">Kode Unik</span><b id="uniqueCode">123</b><button class="copy-mini" onclick="copyTxt(document.getElementById('uniqueCode').textContent)">Salin Kode</button></div>
+            <label class="upload-zone" id="uploadZone">
+              <input type="file" id="fileInput" accept="image/*,.pdf" onchange="handleUpload(this)">
+              <div>
+                <div class="upload-icon" id="uploadIc">⇧</div>
+                <div class="upload-title" id="uploadTitle">Drag & drop file di sini atau klik untuk memilih file</div>
+                <div class="upload-sub" id="uploadSub">PNG, JPG, JPEG, atau PDF maksimal 5MB</div>
+              </div>
+            </label>
+            <div class="form-actions">
+              <button class="btn ghost" onclick="backToForm()">Kembali</button>
+              <button class="btn" id="btnKirim" onclick="submitForm()" disabled>Saya Sudah Transfer</button>
+            </div>
+          </div>
+          <aside>
+            <div class="check-card">
+              <h4>Pastikan transfer kamu sesuai</h4>
+              <div class="check-list">
+                <div class="check">Nominal sesuai dengan kode unik</div>
+                <div class="check">Kode unik dimasukkan</div>
+                <div class="check">Nama pengirim terlihat</div>
+                <div class="check">Tanggal transfer terlihat</div>
+              </div>
+            </div>
+            <div class="note-card">
+              <h4>Catatan Penting</h4>
+              <ol>
+                <li>Transfer sesuai nominal + kode unik.</li>
+                <li>Simpan bukti transfer dengan baik.</li>
+                <li>Verifikasi pembayaran maksimal 1x24 jam.</li>
+                <li>Akses kursus akan dikirim via email.</li>
+              </ol>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div id="fStep4" style="display:none">
+        <div class="panel success">
+          <div class="success-icon">✓</div>
+          <h3>Pendaftaran Berhasil Dikirim</h3>
+          <p>Terima kasih. Tim Pelajari akan memverifikasi pembayaranmu dan mengirim token akses melalui email.</p>
+          <div class="reg-box"><span>Nomor Pendaftaran</span><b id="regNum">REG-0000</b></div>
+          <div><button class="btn" onclick="resetFlow()">Lihat Kursus Lain</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials" id="testimoni">
+    <div class="shell">
+      <div class="section-head">
+        <h2>Apa Kata Mereka?</h2>
+        <p>Testimoni dari siswa yang sudah merasakan manfaatnya</p>
+      </div>
       <div class="testi-grid">
-        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Materi sangat lengkap dan terstruktur. Instruktur menjelaskan dengan cara yang mudah dipahami. Sekarang saya sudah bekerja sebagai UI Designer di startup!"</div><div class="testi-user"><div class="testi-av">RK</div><div><div class="testi-name">Rina Kusuma</div><div class="testi-role">UI Designer — Startup Fintech</div></div></div></div>
-        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Sistem kuis per modul sangat membantu untuk mengukur pemahaman. Gak terasa sudah selesai semua modul dalam 3 minggu karena seru!"</div><div class="testi-user"><div class="testi-av">DP</div><div><div class="testi-name">Dodi Pratama</div><div class="testi-role">Digital Marketer — Agency</div></div></div></div>
-        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Investasi terbaik yang pernah saya buat. Dalam 2 bulan setelah kursus, gaji saya naik 40%. Worth every penny!"</div><div class="testi-user"><div class="testi-av">SA</div><div><div class="testi-name">Sari Amalia</div><div class="testi-role">Data Analyst — E-Commerce</div></div></div></div>
+        <article class="testi"><div class="testi-photo">SN</div><p>Materinya super lengkap dan mudah dipahami. Setelah selesai kursus ini, saya berhasil dapat kerja sebagai UI Designer.</p><h4>Siti Nurhaliza</h4><small>UI Designer</small><br><span class="tag-win">Dapat Kerja UI Designer</span></article>
+        <article class="testi"><div class="testi-photo">AS</div><p>Kursus digital marketingnya praktis banget. Saya bisa langsung terapkan dan hasilnya meningkatkan penjualan 3x lipat.</p><h4>Andi Setiawan</h4><small>Digital Marketer</small><br><span class="tag-win">Penjualan Naik 3x</span></article>
+        <article class="testi"><div class="testi-photo">DL</div><p>Belajar data analytics jadi lebih mudah. Sekarang saya bisa membuat laporan data dan gaji saya naik 40%.</p><h4>Dewi Lestari</h4><small>Data Analyst</small><br><span class="tag-win orange">Gaji Naik 40%</span></article>
+      </div>
+      <div class="cta-band">
+        <div><h3>Siap meningkatkan skill-mu?</h3><p>Bergabung sekarang dan mulai perjalanan belajarmu bersama ribuan siswa lainnya.</p></div>
+        <button class="btn" onclick="scrollToKursus()">Mulai Belajar Sekarang →</button>
       </div>
     </div>
-  </div>
+  </section>
+</main>
 
-  <footer>
-    <p>© 2025 <strong id="footerBrand">AkademiPro</strong>. Semua hak dilindungi.</p>
-    <p style="margin-top:6px">Pertanyaan? Email: <a href="mailto:info@akademipro.id" id="footerEmail">info@akademipro.id</a> · WA: <a href="https://wa.me/6281234567890" id="footerWA">0812-3456-7890</a></p>
-  </footer>
-</div>
-
-<!-- SCREEN: FORM DAFTAR -->
-<div class="screen" id="scrForm">
-  <div class="section">
-    <div class="form-wrap">
-      <!-- Steps -->
-      <div class="steps-bar" id="stepsBar">
-        <div class="step-item done" id="si1"><div class="step-circle" id="sc1">✓</div><div class="step-name">Pilih Kursus</div></div>
-        <div class="step-line"></div>
-        <div class="step-item active" id="si2"><div class="step-circle" id="sc2">2</div><div class="step-name">Data Diri</div></div>
-        <div class="step-line"></div>
-        <div class="step-item" id="si3"><div class="step-circle" id="sc3">3</div><div class="step-name">Pembayaran</div></div>
-        <div class="step-line"></div>
-        <div class="step-item" id="si4"><div class="step-circle" id="sc4">4</div><div class="step-name">Selesai</div></div>
-      </div>
-
-      <!-- Step 2: Data Diri -->
-      <div id="fStep2" class="form-card">
-        <div class="form-head">Data Diri Pendaftar</div>
-        <div class="form-sub">Isi data dengan lengkap dan benar. Tanda <span style="color:#e05252">*</span> wajib diisi.</div>
-        <div class="row2">
-          <div class="fg"><label>Nama Lengkap <span class="req">*</span></label><input type="text" id="fNama" placeholder="Contoh: Budi Santoso"></div>
-          <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="fEmail" placeholder="budi@email.com"></div>
-        </div>
-        <div class="row2">
-          <div class="fg"><label>No. WhatsApp <span class="req">*</span></label><input type="tel" id="fWA" placeholder="08xxxxxxxxxx"></div>
-          <div class="fg"><label>Kota / Domisili</label><input type="text" id="fKota" placeholder="Jakarta"></div>
-        </div>
-        <div class="fg"><label>Kursus yang Dipilih <span class="req">*</span></label><select id="fKursus"></select></div>
-        <div class="row2">
-          <div class="fg"><label>Pekerjaan Saat Ini</label>
-            <select id="fPekerjaan">
-              <option value="">-- Pilih --</option>
-              <option>Pelajar / Mahasiswa</option><option>Karyawan Swasta</option>
-              <option>Wiraswasta / Freelance</option><option>PNS / TNI / Polri</option>
-              <option>Belum Bekerja</option><option>Lainnya</option>
-            </select>
-          </div>
-          <div class="fg"><label>Dari mana tahu kursus ini?</label>
-            <select id="fSumber">
-              <option value="">-- Pilih --</option>
-              <option>Instagram</option><option>Facebook / Meta Ads</option><option>Google</option>
-              <option>YouTube</option><option>Teman / Keluarga</option><option>Komunitas Online</option><option>Lainnya</option>
-            </select>
-          </div>
-        </div>
-        <div class="fg"><label>Tujuan Mengikuti Kursus</label><textarea id="fTujuan" placeholder="Ceritakan tujuanmu mengikuti kursus ini..."></textarea></div>
-        <div class="btn-row">
-          <button class="btn-back" onclick="backToLanding()">← Kembali</button>
-          <button class="btn-next" onclick="goToPayment()">Lanjut ke Pembayaran →</button>
-        </div>
-      </div>
-
-      <!-- Step 3: Pembayaran -->
-      <div id="fStep3" class="form-card" style="display:none">
-        <div class="form-head">Instruksi Pembayaran</div>
-        <div class="form-sub">Transfer sesuai nominal di bawah (termasuk kode unik 3 digit).</div>
-        <div class="amt-box">
-          <div class="amt-label">Total yang harus ditransfer</div>
-          <div class="amt-number" id="payAmt">Rp 299.142</div>
-          <div class="amt-unique">Kode unik: <strong id="uniqueCode">142</strong> sudah termasuk di nominal atas</div>
-        </div>
-        <div class="bank-list" id="bankList"></div>
-        <div class="fg">
-          <label>Upload Bukti Transfer <span class="req">*</span></label>
-          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-            <div class="upload-ic" id="uploadIc">📎</div>
-            <div class="upload-title" id="uploadTitle">Klik untuk upload bukti transfer</div>
-            <div class="upload-sub" id="uploadSub">Foto / screenshot struk — JPG, PNG, PDF, maks 5MB</div>
-            <input type="file" id="fileInput" style="display:none" accept="image/*,.pdf" onchange="handleUpload(this)">
-          </div>
-          <div class="fg-hint">Pastikan nominal, nama pengirim, dan tanggal terlihat jelas</div>
-        </div>
-        <div class="fg"><label>Catatan Pembayaran (opsional)</label><textarea id="fCatatan" placeholder="Contoh: sudah transfer via BCA jam 09.30..."></textarea></div>
-        <div class="btn-row">
-          <button class="btn-back" onclick="backToForm()">← Kembali</button>
-          <button class="btn-next" id="btnKirim" onclick="submitForm()" disabled>Kirim Pendaftaran →</button>
-        </div>
-      </div>
-
-      <!-- Step 4: Sukses -->
-      <div id="fStep4" class="form-card" style="display:none">
-        <div class="success-wrap">
-          <div class="success-ic">🎉</div>
-          <h2>Pendaftaran Terkirim!</h2>
-          <p>Terima kasih! Tim kami akan memverifikasi pembayaranmu dalam <strong>1×24 jam kerja</strong>.</p>
-          <div class="reg-box"><div class="lbl">Nomor Pendaftaran</div><div class="val" id="regNum">#REG-2025-0001</div></div>
-          <div class="steps-info">
-            <div class="step-info-row"><div class="step-info-ic">1</div><div class="step-info-txt"><strong>Verifikasi Pembayaran</strong><span>Admin mengecek bukti transfermu (1×24 jam)</span></div></div>
-            <div class="step-info-row"><div class="step-info-ic">2</div><div class="step-info-txt"><strong>Email Token Akses</strong><span>Kamu mendapat email berisi link portal + token login</span></div></div>
-            <div class="step-info-row"><div class="step-info-ic">3</div><div class="step-info-txt"><strong>Mulai Belajar</strong><span>Login ke portal belajar dan akses semua modul kursus</span></div></div>
-          </div>
-          <button class="btn-next" style="margin:0 auto;display:block" onclick="backToLanding()">Lihat Kursus Lain</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<footer id="faq">
+  <div class="shell">© <span id="year"></span> <strong>Pelajari</strong>. Butuh bantuan? <a id="footerEmail" href="mailto:pelajariapp@gmail.com">pelajariapp@gmail.com</a></div>
+</footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ============================================================
-   KONFIGURASI — ganti sesuai klien
-   ============================================================ */
 const CONFIG = {
   brandName : 'Pelajari',
   email     : 'pelajariapp@gmail.com',
   whatsapp  : '6281212686654',
   scriptUrl : 'https://script.google.com/macros/s/AKfycby9IKljqOnN-JZUFUnP-_vSU9qzwpnFezypmJiaeIZOuh6Q8gf1P--2oxROiqbiUxY1zA/exec',
   bankAccounts: [
-    { bank:'BCA',     rek:'7235 44 8998', an:'Farid Adam' },
-    { bank:'Mandiri', rek:'-', an:'Farid Adam' },
+    { bank:'Mandiri', rek:'123 456 7890 123', an:'Farid Adam' },
+    { bank:'BCA', rek:'7235 44 8998', an:'Farid Adam' },
     { bank:'GoPay/OVO', rek:'0812-1268-6654', an:'Farid Adam' },
   ]
 };
 
-/* Data kursus — fallback statis, akan diganti data live dari Sheets */
-const COURSES = [
-  { id:'C001', emoji:'🎨', theme:'thumb-t1', cat:'Design',       name:'UI/UX Design Bootcamp',       desc:'Kuasai Figma, design system, dan prototyping dari nol hingga siap kerja.', tags:['10 modul','3 bln akses'], harga:299000, ori:499000 },
-  { id:'C002', emoji:'📣', theme:'thumb-t2', cat:'Marketing',    name:'Digital Marketing Pro',        desc:'SEO, Meta Ads, Google Ads, dan strategi konten untuk bisnis modern.',        tags:['8 modul','3 bln akses'],  harga:249000, ori:399000 },
-  { id:'C003', emoji:'📊', theme:'thumb-t3', cat:'Data',         name:'Data Analytics dengan Python', desc:'Analisis data, visualisasi, dan pengenalan machine learning.',                tags:['12 modul','6 bln akses'], harga:399000, ori:699000 },
-  { id:'C004', emoji:'💻', theme:'thumb-t4', cat:'Programming',  name:'Web Dev Full Stack',           desc:'HTML, CSS, JavaScript, React, dan Node.js dalam satu bootcamp lengkap.',      tags:['15 modul','6 bln akses'], harga:499000, ori:799000 },
+let COURSES = [
+  { id:'C001', level:'Pemula', type:'design', cat:'UI/UX Design', name:'UI/UX Design Fundamental', desc:'Belajar riset user, wireframe, prototype, sampai portfolio case study.', tags:['12 Modul','6 Jam','Sertifikat'], harga:299000, ori:499000, rating:'4.8 (320)', media:'UI/UX' },
+  { id:'C002', level:'Pemula', type:'marketing', cat:'Digital Marketing', name:'Digital Marketing untuk Pemula', desc:'Strategi lengkap digital marketing dari dasar hingga kampanye berbayar.', tags:['10 Modul','6 Jam','Sertifikat'], harga:249000, ori:399000, rating:'4.8 (250)', media:'' },
+  { id:'C003', level:'Menengah', type:'data', cat:'Data', name:'Data Analytics dengan Excel & SQL', desc:'Analisis data, pivot, visualisasi, dan SQL untuk decision making.', tags:['14 Modul','10 Jam','Sertifikat'], harga:349000, ori:599000, rating:'4.8 (210)', media:'' },
+  { id:'C004', level:'Pemula', type:'self', cat:'Pengembangan Diri', name:'Produktivitas & Karir Digital', desc:'Bangun kebiasaan belajar, portfolio, dan strategi karir digital.', tags:['8 Modul','4 Jam','Sertifikat'], harga:199000, ori:299000, rating:'4.7 (180)', media:'CAREER' },
 ];
+let activeCategory = 'Semua Kursus';
+let selectedCourse = null;
+let uploadedFile = null;
 
-let selectedCourse = null, uploadedFile = null;
+function money(n){ return 'Rp' + Number(n || 0).toLocaleString('id-ID'); }
+function esc(str){ return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ---- RENDER ---- */
-function fmt(n){ return 'Rp ' + n.toLocaleString('id-ID'); }
+function normalizeCourse(c, idx){
+  const tags = Array.isArray(c.tags) ? c.tags : [c.modul || '10 Modul', c.akses || 'Akses Kursus', 'Sertifikat'];
+  const cat = c.cat || c.kategori || ['UI/UX Design','Digital Marketing','Data','Pengembangan Diri'][idx % 4];
+  const type = cat.toLowerCase().includes('marketing') ? 'marketing' : cat.toLowerCase().includes('data') ? 'data' : cat.toLowerCase().includes('diri') ? 'self' : 'design';
+  return {
+    id:String(c.id || 'C00' + (idx + 1)),
+    level:c.level || (type === 'data' ? 'Menengah' : 'Pemula'),
+    type,
+    cat,
+    name:c.name || c.nama || 'Kursus Pelajari',
+    desc:c.desc || c.deskripsi || 'Kursus terstruktur dengan materi praktis dan sertifikat kelulusan.',
+    tags,
+    harga:Number(c.harga) || 299000,
+    ori:Number(c.ori || c.hargaAsli) || 0,
+    rating:c.rating || '4.8 (120)',
+    media:c.media || (type === 'design' ? 'UI/UX' : type === 'self' ? 'CAREER' : '')
+  };
+}
 
-function renderCourses(list){
-  const grid = document.getElementById('courseGrid');
-  const sel  = document.getElementById('fKursus');
-  grid.innerHTML = '';
-  sel.innerHTML  = '<option value="">-- Pilih kursus --</option>';
-  list.forEach(c => {
-    grid.innerHTML += `
-      <div class="course-card" id="cc_${c.id}" onclick="selectCourse('${c.id}')">
-        <div class="course-thumb ${c.theme}">${c.emoji}</div>
-        <div class="course-body">
-          <div class="course-cat">${c.cat}</div>
-          <div class="course-name">${c.name}</div>
-          <div class="course-desc">${c.desc}</div>
-          <div class="course-tags">${c.tags.map(t=>`<span class="course-tag">${t}</span>`).join('')}</div>
-          <div class="course-footer">
-            <div><div class="price-new">${fmt(c.harga)}</div><div class="price-old">${fmt(c.ori)}</div></div>
-            <button class="btn-pilih">Pilih Kursus</button>
-          </div>
+function renderTabs(){
+  const cats = ['Semua Kursus', ...Array.from(new Set(COURSES.map(c => c.cat)))];
+  document.getElementById('courseTabs').innerHTML = cats.map(cat => `<button class="tab ${cat === activeCategory ? 'active' : ''}" onclick="setCategory('${esc(cat)}')">${esc(cat)}</button>`).join('');
+}
+
+function renderCourses(){
+  const list = activeCategory === 'Semua Kursus' ? COURSES : COURSES.filter(c => c.cat === activeCategory);
+  document.getElementById('courseGrid').innerHTML = list.map(c => {
+    const visual = c.type === 'marketing' ? '<div class="megaphone"></div>' : c.type === 'data' ? '<div class="chart"><span></span><span></span><span></span><span></span></div>' : `<div class="mock-device"></div><div class="media-label">${esc(c.media || c.cat)}</div>`;
+    return `
+      <article class="course-card">
+        <div class="course-media ${c.type}">
+          <span class="level ${c.level === 'Menengah' ? 'mid' : ''}">${esc(c.level)}</span>
+          ${visual}
         </div>
-      </div>`;
-    sel.innerHTML += `<option value="${c.id}" data-harga="${c.harga}">${c.name} — ${fmt(c.harga)}</option>`;
-  });
+        <div class="course-body">
+          <h3>${esc(c.name)}</h3>
+          <p>${esc(c.desc)}</p>
+          <div class="course-meta">${c.tags.slice(0,3).map(t => `<span>${esc(t)}</span>`).join('')}</div>
+          <div class="course-bottom"><div class="rating"><b>★</b> ${esc(c.rating)}</div><div class="price">${money(c.harga)}</div></div>
+          <button class="btn full" onclick="selectCourse('${esc(c.id)}')">Daftar Sekarang</button>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  const sel = document.getElementById('fKursus');
+  sel.innerHTML = '<option value="">Pilih kursus</option>' + COURSES.map(c => `<option value="${esc(c.id)}" data-harga="${c.harga}">${esc(c.name)} - ${money(c.harga)}</option>`).join('');
+  if (selectedCourse) sel.value = selectedCourse.id;
 }
 
 function renderBanks(){
-  document.getElementById('bankList').innerHTML = CONFIG.bankAccounts.map(b => `
-    <div class="bank-row">
-      <div class="bank-logo">${b.bank}</div>
-      <div class="bank-info">
-        <div class="bank-name">${b.bank}</div>
-        <div class="bank-rek">${b.rek}</div>
-        <div class="bank-an">a.n. ${b.an}</div>
+  document.getElementById('bankList').innerHTML = CONFIG.bankAccounts.map((b, idx) => `
+    <div class="bank-box">
+      <div class="bank-title">Transfer ke Rekening</div>
+      <div class="bank-line">
+        <div class="bank-logo">${esc(b.bank)}</div>
+        <div style="flex:1"><div class="bank-number">${esc(b.rek)}</div><div class="bank-owner">a.n. ${esc(b.an)}</div></div>
+        <button class="copy-mini" onclick="copyTxt('${esc(b.rek.replace(/\s/g,''))}')">Salin Rekening</button>
       </div>
-      <button class="copy-btn" onclick="copyTxt('${b.rek.replace(/\s/g,'')}')">Salin</button>
-    </div>`).join('');
+    </div>
+  `).join('');
 }
 
-/* ---- NAVIGASI ---- */
+function setCategory(cat){
+  activeCategory = cat;
+  renderTabs();
+  renderCourses();
+}
+
 function selectCourse(id){
-  selectedCourse = COURSES.find(c => c.id === id);
-  document.querySelectorAll('.course-card').forEach(el => el.classList.remove('selected'));
-  document.getElementById('cc_' + id).classList.add('selected');
-  document.getElementById('fKursus').value = id;
-  setTimeout(() => {
-    document.getElementById('scrLanding').classList.remove('active');
-    document.getElementById('scrForm').classList.add('active');
-    window.scrollTo({ top:0, behavior:'smooth' });
-    setStep(2);
-  }, 280);
+  selectedCourse = COURSES.find(c => c.id === id) || COURSES[0];
+  document.getElementById('fKursus').value = selectedCourse.id;
+  updateSummary();
+  scrollToSignup();
 }
 
-function scrollToKursus(){
-  document.getElementById('kursus').scrollIntoView({ behavior:'smooth' });
+function syncSelectedFromSelect(){
+  const id = document.getElementById('fKursus').value;
+  selectedCourse = COURSES.find(c => c.id === id) || null;
+  updateSummary();
 }
 
-function backToLanding(){
-  document.getElementById('scrForm').classList.remove('active');
-  document.getElementById('scrLanding').classList.add('active');
-  ['fStep2','fStep3','fStep4'].forEach((id,i) => {
-    document.getElementById(id).style.display = i===0 ? 'block' : 'none';
-  });
-  setStep(2); uploadedFile = null;
-  window.scrollTo({ top:0, behavior:'smooth' });
+function updateSummary(){
+  const c = selectedCourse || COURSES[0];
+  document.getElementById('sumCourse').textContent = c.name;
+  document.getElementById('sumMods').textContent = c.tags[0] || '-';
+  document.getElementById('sumVideo').textContent = c.tags[1] || '-';
+  document.getElementById('sumAccess').textContent = c.tags[2] || 'Sertifikat';
+  document.getElementById('sumPrice').textContent = money(c.harga);
 }
 
-function backToForm(){
-  document.getElementById('fStep3').style.display = 'none';
-  document.getElementById('fStep2').style.display = 'block';
-  setStep(2);
-}
+function scrollToKursus(){ document.getElementById('kursus').scrollIntoView({ behavior:'smooth' }); }
+function scrollToSignup(){ document.getElementById('daftar').scrollIntoView({ behavior:'smooth' }); setStep(2); }
 
 function setStep(n){
   for(let i=1;i<=4;i++){
     const si = document.getElementById('si'+i);
     const sc = document.getElementById('sc'+i);
     si.classList.remove('active','done');
-    if(i < n){ si.classList.add('done'); sc.textContent='✓'; }
-    else if(i === n){ si.classList.add('active'); sc.textContent=i; }
-    else sc.textContent=i;
+    if(i < n){ si.classList.add('done'); sc.textContent = '✓'; }
+    else if(i === n){ si.classList.add('active'); sc.textContent = i; }
+    else sc.textContent = i;
   }
 }
 
 function goToPayment(){
-  const nama   = document.getElementById('fNama').value.trim();
-  const email  = document.getElementById('fEmail').value.trim();
-  const wa     = document.getElementById('fWA').value.trim();
-  const kursus = document.getElementById('fKursus').value;
-  if(!nama||!email||!wa||!kursus){ showToast('⚠️ Lengkapi semua field wajib (*)'); return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('⚠️ Format email tidak valid'); return; }
-
-  const opt    = document.getElementById('fKursus').selectedOptions[0];
-  const harga  = parseInt(opt.dataset.harga) || 299000;
-  const kode   = Math.floor(Math.random()*900+100);
-  document.getElementById('uniqueCode').textContent = kode;
-  document.getElementById('payAmt').textContent = fmt(harga + kode);
-
+  const nama = document.getElementById('fNama').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const wa = document.getElementById('fWA').value.trim();
+  const kursusId = document.getElementById('fKursus').value;
+  if(!nama || !email || !wa || !kursusId){ showToast('Lengkapi nama, email, WhatsApp, dan kursus.'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('Format email belum valid.'); return; }
+  selectedCourse = COURSES.find(c => c.id === kursusId) || selectedCourse || COURSES[0];
+  const unique = Math.floor(Math.random() * 900 + 100);
+  document.getElementById('uniqueCode').textContent = unique;
+  document.getElementById('payAmt').textContent = money(selectedCourse.harga + unique);
   document.getElementById('fStep2').style.display = 'none';
   document.getElementById('fStep3').style.display = 'block';
+  document.getElementById('fStep4').style.display = 'none';
   setStep(3);
-  window.scrollTo({ top:0, behavior:'smooth' });
+  scrollToSignup();
 }
 
-/* ---- UPLOAD ---- */
+function backToForm(){
+  document.getElementById('fStep2').style.display = 'block';
+  document.getElementById('fStep3').style.display = 'none';
+  document.getElementById('fStep4').style.display = 'none';
+  setStep(2);
+  scrollToSignup();
+}
+
+function resetFlow(){
+  uploadedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('uploadZone').classList.remove('uploaded');
+  document.getElementById('uploadIc').textContent = '⇧';
+  document.getElementById('uploadTitle').textContent = 'Drag & drop file di sini atau klik untuk memilih file';
+  document.getElementById('uploadSub').textContent = 'PNG, JPG, JPEG, atau PDF maksimal 5MB';
+  document.getElementById('btnKirim').disabled = true;
+  backToForm();
+  scrollToKursus();
+}
+
 function handleUpload(input){
-  if(input.files && input.files[0]){
-    uploadedFile = input.files[0];
-    document.getElementById('uploadZone').classList.add('uploaded');
-    document.getElementById('uploadIc').textContent = '✅';
-    document.getElementById('uploadTitle').textContent = uploadedFile.name;
-    document.getElementById('uploadSub').textContent = (uploadedFile.size/1024).toFixed(0)+' KB — siap dikirim';
-    document.getElementById('btnKirim').disabled = false;
-  }
+  if(!input.files || !input.files[0]) return;
+  uploadedFile = input.files[0];
+  if(uploadedFile.size > 5 * 1024 * 1024){ showToast('Ukuran file maksimal 5MB.'); input.value = ''; uploadedFile = null; return; }
+  document.getElementById('uploadZone').classList.add('uploaded');
+  document.getElementById('uploadIc').textContent = '✓';
+  document.getElementById('uploadTitle').textContent = uploadedFile.name;
+  document.getElementById('uploadSub').textContent = Math.round(uploadedFile.size / 1024) + ' KB - siap dikirim';
+  document.getElementById('btnKirim').disabled = false;
 }
 
-/* ---- SUBMIT ---- */
 async function submitForm(){
+  if(!uploadedFile){ showToast('Upload bukti transfer terlebih dahulu.'); return; }
   const btn = document.getElementById('btnKirim');
-  btn.textContent = 'Mengirim...'; btn.disabled = true;
-
-  const regNo = '#REG-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*9000+1000));
+  btn.disabled = true;
+  btn.textContent = 'Mengirim...';
+  const regNo = 'REG-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 9000 + 1000));
   document.getElementById('regNum').textContent = regNo;
-
   const payload = {
-    action   : 'register',
-    nama     : document.getElementById('fNama').value,
-    email    : document.getElementById('fEmail').value,
-    wa       : document.getElementById('fWA').value,
-    kota     : document.getElementById('fKota').value,
-    kursus   : document.getElementById('fKursus').value,
-    kursusNama: document.getElementById('fKursus').selectedOptions[0]?.text || '',
-    pekerjaan: document.getElementById('fPekerjaan').value,
-    sumber   : document.getElementById('fSumber').value,
-    tujuan   : document.getElementById('fTujuan').value,
-    catatan  : document.getElementById('fCatatan').value,
-    totalBayar: document.getElementById('payAmt').textContent,
-    nomorPendaftaran: regNo,
-    timestamp: new Date().toLocaleString('id-ID'),
+    action:'register',
+    nama:document.getElementById('fNama').value.trim(),
+    email:document.getElementById('fEmail').value.trim(),
+    wa:document.getElementById('fWA').value.trim(),
+    kota:document.getElementById('fKota').value.trim(),
+    kursus:document.getElementById('fKursus').value,
+    kursusNama:selectedCourse ? selectedCourse.name : document.getElementById('fKursus').selectedOptions[0]?.text || '',
+    pekerjaan:document.getElementById('fPekerjaan').value,
+    sumber:document.getElementById('fSumber').value,
+    tujuan:document.getElementById('fTujuan').value,
+    catatan:document.getElementById('fCatatan').value,
+    totalBayar:document.getElementById('payAmt').textContent,
+    nomorPendaftaran:regNo,
+    timestamp:new Date().toLocaleString('id-ID')
   };
-
-  const isReal = CONFIG.scriptUrl && !CONFIG.scriptUrl.includes('YOUR_SCRIPT_ID');
-
-  if(isReal && uploadedFile){
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      payload.buktiBase64 = e.target.result;
-      payload.buktiNama   = uploadedFile.name;
-      try{ await fetch(CONFIG.scriptUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }catch(e){}
+  const reader = new FileReader();
+  reader.onload = async e => {
+    payload.buktiBase64 = e.target.result;
+    payload.buktiNama = uploadedFile.name;
+    try {
+      await fetch(CONFIG.scriptUrl, { method:'POST', mode:'no-cors', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify(payload) });
       showSuccess();
-    };
-    reader.readAsDataURL(uploadedFile);
-  } else {
-    setTimeout(showSuccess, 1000);
-  }
+    } catch(err) {
+      showToast('Koneksi gagal, coba kirim ulang.');
+      btn.disabled = false;
+      btn.textContent = 'Saya Sudah Transfer';
+    }
+  };
+  reader.readAsDataURL(uploadedFile);
 }
 
 function showSuccess(){
+  document.getElementById('fStep2').style.display = 'none';
   document.getElementById('fStep3').style.display = 'none';
   document.getElementById('fStep4').style.display = 'block';
   setStep(4);
-  window.scrollTo({ top:0, behavior:'smooth' });
+  document.getElementById('btnKirim').textContent = 'Saya Sudah Transfer';
+  scrollToSignup();
 }
 
-/* ---- UTILS ---- */
 function copyTxt(t){
-  navigator.clipboard.writeText(t).catch(()=>{});
-  showToast('✓ Nomor rekening disalin!');
-}
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('on');
-  setTimeout(()=>t.classList.remove('on'), 2800);
+  navigator.clipboard?.writeText(t).catch(()=>{});
+  showToast('Berhasil disalin.');
 }
 
-/* ---- INIT ---- */
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  setTimeout(() => el.classList.remove('on'), 2600);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('navBrand').innerHTML = CONFIG.brandName.replace(/([A-Z][a-z]+)([A-Z])/,'$1<span>$2') + (CONFIG.brandName.match(/[A-Z]/g)||[]).length > 1 ? '' : '</span>';
-  document.getElementById('navBrand').textContent = CONFIG.brandName;
-  document.getElementById('footerBrand').textContent = CONFIG.brandName;
+  document.getElementById('year').textContent = new Date().getFullYear();
   document.getElementById('footerEmail').textContent = CONFIG.email;
   document.getElementById('footerEmail').href = 'mailto:' + CONFIG.email;
-  document.getElementById('footerWA').href = 'https://wa.me/' + CONFIG.whatsapp;
-
-  renderCourses(COURSES);
+  document.getElementById('navBrand').textContent = CONFIG.brandName;
+  COURSES = COURSES.map(normalizeCourse);
+  renderTabs();
+  renderCourses();
   renderBanks();
+  selectedCourse = COURSES[0];
+  document.getElementById('fKursus').value = selectedCourse.id;
+  updateSummary();
 
-  /* Ambil data kursus live dari Sheets jika sudah deploy */
-  if(CONFIG.scriptUrl && !CONFIG.scriptUrl.includes('YOUR_SCRIPT_ID')){
-    fetch(CONFIG.scriptUrl + '?action=getCourses')
-      .then(r => r.json())
-      .then(d => { if(d && d.courses && d.courses.length) renderCourses(d.courses); })
-      .catch(()=>{});
-  }
+  fetch(CONFIG.scriptUrl + '?action=getCourses')
+    .then(r => r.json())
+    .then(d => {
+      if(d && Array.isArray(d.courses) && d.courses.length){
+        COURSES = d.courses.map(normalizeCourse);
+        selectedCourse = COURSES[0];
+        activeCategory = 'Semua Kursus';
+        renderTabs();
+        renderCourses();
+        document.getElementById('fKursus').value = selectedCourse.id;
+        updateSummary();
+      }
+    })
+    .catch(()=>{});
 });
 </script>
 </body>
